@@ -1,0 +1,17 @@
+<div class="login-card">
+  <h2>Sign in</h2>
+
+  <form [formGroup]="form" (ngSubmit)="submit()">
+    <label>Email
+      <input formControlName="email" type="email" />
+    </label>
+
+    <label>Password
+      <input formControlName="password" type="password" />
+    </label>
+
+    <button type="submit" [disabled]="form.invalid">Login</button>
+  </form>
+
+  <p class="error" *ngIf="error()">{{ error() }}</p>
+</div>
