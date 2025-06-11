@@ -3,17 +3,30 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
 
-export interface LoginRequest  { email: string; password: string; }
+export interface LoginRequest {
+  email: string;
+  password: string;
+}
 export interface LoginResponse { token: string; user: { id: string; email: string }; }
+
+export interface Result {
+  state: boolean;
+  msgDesc: string;
+  msgCode: string;           // "200", "500", …
+}
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private http = inject(HttpClient);
-  private api  = 'http://localhost:1010/osms'; // Replace with your backend
+  private api  = 'http://localhost:1010/serviceLogin/login'; //
 
-  login(body: LoginRequest): Observable<LoginResponse> {
-    return this.http.post<LoginResponse>(`${this.api}/serviceLogin/login`, body).pipe(
-      tap(res => localStorage.setItem('auth_token', res.token))
+
+  /** POST credentials –> Result */
+  login(body: LoginRequest): Observable<Result> {
+    return this.http.post<Result>(this.api, body).pipe(
+      tap(res => {
+        if (res.state) sessionStorage.setItem('auth_state', 'true');
+      })
     );
   }
 
