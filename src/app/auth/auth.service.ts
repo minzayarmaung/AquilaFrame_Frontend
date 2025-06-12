@@ -2,6 +2,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
+import { environment } from '../src/environments/environment';
 
 export interface LoginRequest {
   email: string;
@@ -18,8 +19,8 @@ export interface Result {
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private http = inject(HttpClient);
-  private api  = 'http://localhost:1010/serviceLogin/login'; //
-
+  private baseUrl = environment.apiBaseUrl;
+  private api = this.baseUrl + '/serviceLogin/login';
 
   /** POST credentials –> Result */
   login(body: LoginRequest): Observable<Result> {
