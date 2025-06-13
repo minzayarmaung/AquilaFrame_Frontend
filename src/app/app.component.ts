@@ -1,5 +1,9 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { NavbarComponent } from "./src/components/navbar/navbar.component";
+import { SidebarComponent } from "./src/components/sidebar/sidebar.component";
+import { DashboardComponent } from "./src/components/dashboard/dashboard.component";
+
 
 @Component({
   selector: 'app-root',
@@ -11,4 +15,5 @@ import { RouterOutlet } from '@angular/router';
 })
 export class AppComponent {
   title = 'osms_frontend';
+
 }

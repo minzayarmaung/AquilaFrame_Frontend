@@ -4,11 +4,12 @@ import { HomeComponent } from './src/components/home/home.component';
 import { SignupComponent } from './src/components/signup/signup.component';
 import { ForgotPasswordComponent } from './pages/auth/forgot-password.component';
 import { authGuard } from './auth/auth.guard';
+import { DashboardComponent } from './src/components/dashboard/dashboard.component';
 
 export const routes: Routes = [
-  { path: '', redirectTo: 'home', pathMatch: 'full' },
+  { path: '', redirectTo: 'login', pathMatch: 'full' },
   { path: 'login', component: LoginComponent  },
-  { path: 'home', component: HomeComponent },
+  { path: 'home', component: HomeComponent},
   { path: 'signup', component: SignupComponent },
   { path: 'forgot-password', component: ForgotPasswordComponent },
 

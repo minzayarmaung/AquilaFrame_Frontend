@@ -1,0 +1,38 @@
+<div class="d-flex flex-column flex-shrink-0 p-3 sidebar" [class.closed]="isSidebarClosed">
+  <button class="toggle-btn" (click)="toggleSidebar()">
+    <i class="bi bi-list icon"></i>
+    <span *ngIf="!isSidebarClosed">Toggle Sidebar</span>
+  </button>
+  <ul class="nav nav-pills flex-column mb-auto">
+    <li class="nav-item">
+      <a href="/home" class="nav-link" aria-current="page">
+        <i class="bi bi-house-door icon"></i>
+        <span *ngIf="!isSidebarClosed">Dashboard</span>
+      </a>
+    </li>
+    <li>
+      <a href="#" class="nav-link link-dark">
+        <i class="bi bi-box-seam icon"></i>
+        <span *ngIf="!isSidebarClosed">Orders</span>
+      </a>
+    </li>
+    <li>
+      <a href="#" class="nav-link link-dark">
+        <i class="bi bi-cart icon"></i>
+        <span *ngIf="!isSidebarClosed">Products</span>
+      </a>
+    </li>
+    <li>
+      <a href="#" class="nav-link link-dark">
+        <i class="bi bi-people icon"></i>
+        <span *ngIf="!isSidebarClosed">Customers</span>
+      </a>
+    </li>
+    <li>
+      <a href="#" class="nav-link link-dark">
+        <i class="bi bi-file-earmark-text icon"></i>
+        <span *ngIf="!isSidebarClosed">Reports</span>
+      </a>
+    </li>
+  </ul>
+</div>
