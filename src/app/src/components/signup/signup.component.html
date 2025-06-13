@@ -1,1 +1,77 @@
-<h2> SignUP Works !</h2>
+<div class="container d-flex justify-content-center align-items-center min-vh-100">
+  <div class="card shadow p-4" style="max-width: 400px; width: 100%;">
+    <h2 class="text-center mb-4">OSMS User Signup</h2>
+
+    <form [formGroup]="form" (ngSubmit)="submit()">
+      <div class="mb-3">
+        <label for="username" class="form-label">Username</label>
+        <input
+          id="username"
+          formControlName="username"
+          type="username"
+          class="form-control"
+          [class.is-invalid]="form.get('username')?.touched && form.get('username')?.invalid"
+        />
+        <div class="invalid-feedback" *ngIf="form.get('username')?.hasError('required')">
+          Username is required
+        </div>
+        <div class="invalid-feedback" *ngIf="form.get('username')?.hasError('username')">
+          Invalid Username
+        </div>
+      </div>
+
+        <div class="mb-3">
+        <label for="email" class="form-label">Email address</label>
+        <input
+          id="email"
+          formControlName="email"
+          type="email"
+          class="form-control"
+          [class.is-invalid]="form.get('email')?.touched && form.get('email')?.invalid"
+        />
+        <div class="invalid-feedback" *ngIf="form.get('email')?.hasError('required')">
+          Email is required
+        </div>
+        <div class="invalid-feedback" *ngIf="form.get('email')?.hasError('email')">
+          Invalid email format
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label for="password" class="form-label">Password</label>
+        <input
+          id="password"
+          formControlName="password"
+          type="password"
+          class="form-control"
+          [class.is-invalid]="form.get('password')?.touched && form.get('password')?.invalid"
+        />
+        <div class="invalid-feedback" *ngIf="form.get('password')?.hasError('required')">
+          Password is required
+        </div>
+      </div>
+
+      <div class="text-end mb-3">
+        <a routerLink="/forgot-password" class="text-decoration-none small">Forgot Password?</a>
+      </div>
+
+
+      <button type="submit" class="btn btn-primary w-100 mb-2" [disabled]="form.invalid">
+        Login
+      </button>
+    </form>
+
+    <a routerLink="/signup" class="btn btn-outline-secondary w-100">
+      Signup
+    </a>
+
+    <a routerLink="/signup" class="btn btn-outline-danger w-100 d-flex align-items-center justify-content-center gap-2 mt-2">
+      <i class="fab fa-google"></i>
+      Continue with Google
+    </a>
+
+    <div *ngIf="error()" class="alert alert-danger mt-3 text-center">
+      {{ error() }}
+    </div>
+  </div>
+</div>
