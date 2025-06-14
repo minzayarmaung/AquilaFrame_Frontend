@@ -3,11 +3,12 @@ import { AuthService, LoginRequest, Result, SignupRequest } from '../../../auth/
 import { AbstractControl, FormBuilder, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { CustomValidators } from '../../services/customValidators';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-signup',
   standalone: true,
-  imports: [ReactiveFormsModule , RouterModule],
+  imports: [ReactiveFormsModule , RouterModule , CommonModule],
   templateUrl: './signup.component.html',
   styleUrl: './signup.component.css'
 })

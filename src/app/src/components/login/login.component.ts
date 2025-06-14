@@ -4,6 +4,7 @@ import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { AuthService, Result } from '../../../auth/auth.service';
 import { CommonModule } from '@angular/common';
+import { trigger, transition, style, animate } from '@angular/animations';
 
 
 @Component({
@@ -11,9 +12,22 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule , RouterModule],
   templateUrl: './login.component.html',
-  styleUrl: './login.component.css'
+  styleUrls: ['./login.component.css'],
+   animations: [
+    trigger('fade', [
+      transition(':enter', [
+        style({ opacity: 0 }),
+        animate('500ms ease-in', style({ opacity: 1 })),
+      ]),
+      transition(':leave', [
+        animate('500ms ease-out', style({ opacity: 0 })),
+      ]),
+    ])
+  ]
 })
 export class LoginComponent {
+showPassword: boolean = false;
+loading = false;
 [x: string]: any;
   private fb     = inject(FormBuilder);
   private auth   = inject(AuthService);
@@ -50,9 +64,17 @@ submit(): void {
   this.auth.login(loginData).subscribe({
     next: (res: Result) => {
       if (res.state) {
-        this.router.navigateByUrl('/home');
+        this.loading = true;
+          setTimeout(() => {
+            this.loading = false;
+            this.router.navigateByUrl('/home');
+          }, 4000); // wait 2 sec
       } else {
-        this.error.set(`${res.msgDesc} (code ${res.msgCode})`);
+        this.loading = true;
+        setTimeout(() => {
+            this.loading = false;
+            this.error.set(`${res.msgDesc} (code ${res.msgCode})`);
+          }, 2000); // wait 2 sec
       }
     },
     error: () => this.error.set('Could not reach server')

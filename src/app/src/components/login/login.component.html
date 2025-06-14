@@ -2,6 +2,7 @@
   <div class="card shadow p-4" style="max-width: 400px; width: 100%;">
     <h2 class="text-center mb-4">OSMS User Login</h2>
 
+
     <form [formGroup]="form" (ngSubmit)="submit()">
       <div class="mb-3">
         <label for="email" class="form-label">Email address</label>
@@ -20,19 +21,38 @@
         </div>
       </div>
 
-      <div class="mb-3">
+
+      <div class="mb-3 position-relative">
         <label for="password" class="form-label">Password</label>
-        <input
-          id="password"
-          formControlName="password"
-          type="password"
-          class="form-control"
-          [class.is-invalid]="form.get('password')?.touched && form.get('password')?.invalid"
-        />
+        <div class="input-group">
+          <input
+            [type]="showPassword ? 'text' : 'password'"
+            id="password"
+            formControlName="password"
+            class="form-control"
+            [class.is-invalid]="form.get('password')?.touched && form.get('password')?.invalid"
+          />
+          <button
+            type="button"
+            class="btn btn-outline-secondary"
+            (click)="showPassword = !showPassword"
+            tabindex="-1"
+          >
+            <i [class]="showPassword ? 'bi bi-eye-slash' : 'bi bi-eye'"></i>
+          </button>
+        </div>
         <div class="invalid-feedback" *ngIf="form.get('password')?.hasError('required')">
           Password is required
         </div>
       </div>
+
+      <!-- Loading Spinner -->
+      <div *ngIf="loading" @fade class="loading-container text-center">
+        <!-- <img src="https://img.pikbest.com/png-images/20190918/cartoon-snail-loading-loading-gif-animation_2734139.png!bw700" alt="Loading..." class="loading-gif" /> -->
+        <img src="https://lh5.googleusercontent.com/proxy/OUqG0HgVNVMNorlPCmI4VgJa-3h7uHLkkMy9vdJ0eRsQlvJBytFUS-HvuW-O9EJd-c9xB7KAqlwby4Fzp59g1705FzBuP-F8dC1ZaBQtmLeCu5i6FfSd6Mmzh8mjOwgrEYZwy5UStg" alt="Loading..." class="loading-gif" />
+        <p>Please wait...</p>
+      </div>
+
 
       <div class="text-end mb-3">
         <a routerLink="/forgot-password" class="text-decoration-none small">Forgot Password?</a>

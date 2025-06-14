@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { environment } from '../../src/environments/environment';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -19,7 +19,7 @@ export class ForgotPasswordComponent {
   message: string | null = null;
   error: string | null = null;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient ,  private router: Router) {}
 
 sendResetLink() {
   this.message = null;
@@ -32,10 +32,12 @@ sendResetLink() {
 
   const payload = { email: this.email };
 
-  this.http.post<any>(this.baseUrl + '/serviceAuth/forgotPassword', payload).subscribe({
+  this.http.post<any>(this.baseUrl + '/authController/forgotPassword', payload).subscribe({
     next: (res) => {
       if (res.state) {
         this.message = res.msgDesc;
+        localStorage.setItem('reset_email', this.email);
+        this.router.navigate(['/verify-code']);
       } else {
         this.error = res.msgDesc || 'Reset failed.';
       }

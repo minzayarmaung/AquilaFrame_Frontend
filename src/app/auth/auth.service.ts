@@ -27,7 +27,7 @@ export interface Result {
 export class AuthService {
   private http = inject(HttpClient);
   private baseUrl = environment.apiBaseUrl;
-  private api = this.baseUrl + '/serviceLogin/login';
+  private api = this.baseUrl + '/loginController/login';
 
   /** POST credentials –> Result */
   login(body: LoginRequest): Observable<Result> {
