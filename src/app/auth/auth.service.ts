@@ -20,24 +20,32 @@ export interface LoginResponse { token: string; user: { id: string; email: strin
 export interface Result {
   state: boolean;
   msgDesc: string;
-  msgCode: string;           // "200", "500", …
+  msgCode: string;
 }
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private http = inject(HttpClient);
   private baseUrl = environment.apiBaseUrl;
-  private api = this.baseUrl + '/loginController/login';
+  private loginApi = this.baseUrl + '/loginController/login';
+  private signupApi = this.baseUrl + '/signupController/signup'
 
-  /** POST credentials –> Result */
   login(body: LoginRequest): Observable<Result> {
-    return this.http.post<Result>(this.api, body).pipe(
+    return this.http.post<Result>(this.loginApi, body).pipe(
       tap(res => {
         if (res.state) sessionStorage.setItem('auth_state', 'true');
       })
     );
   }
 
-  logout(): void        { localStorage.removeItem('auth_token'); }
+  signup(body: SignupRequest): Observable<Result> {
+    return this.http.post<Result>(this.signupApi, body).pipe(
+      tap(res => {
+        if (res.state) sessionStorage.setItem('auth_state', 'true');
+      })
+    );
+  }
+
+  logout(): void { localStorage.removeItem('auth_token'); }
   isLoggedIn(): boolean { return !!localStorage.getItem('auth_token'); }
 }

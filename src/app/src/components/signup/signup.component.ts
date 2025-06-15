@@ -1,63 +1,91 @@
 import { Component, inject, signal } from '@angular/core';
-import { AuthService, LoginRequest, Result, SignupRequest } from '../../../auth/auth.service';
-import { AbstractControl, FormBuilder, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
+import { AuthService, SignupRequest, Result } from '../../../auth/auth.service';
+import {
+  AbstractControl,
+  FormBuilder,
+  Validators,
+  ValidatorFn,
+  ReactiveFormsModule
+} from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
-import { CustomValidators } from '../../services/customValidators';
 import { CommonModule } from '@angular/common';
+import { CustomValidators } from '../../services/customValidators';
 
 @Component({
   selector: 'app-signup',
   standalone: true,
-  imports: [ReactiveFormsModule , RouterModule , CommonModule],
+  imports: [ReactiveFormsModule, RouterModule, CommonModule],
   templateUrl: './signup.component.html',
   styleUrl: './signup.component.css'
 })
 export class SignupComponent {
-
-[x: string]: any;
-  private fb     = inject(FormBuilder);
-  private auth   = inject(AuthService);
-  private router = inject(Router);
-
+  loading = false;
+  showPassword = false;
+  showPassword1 = false;
   error = signal<string | null>(null);
 
-  form = this.fb.group({
-    username : ['' , [Validators.required, CustomValidators.userNameLength ]],
-    email:    ['', [Validators.required, Validators.email]],
-    password: ['', Validators.required]
-  });
+  private fb = inject(FormBuilder);
+  private auth = inject(AuthService);
+  private router = inject(Router);
 
-submit(): void {
-  this.error.set(null);
+  passwordMatchValidator: ValidatorFn = (group): { [key: string]: any } | null => {
+    const pass = group.get('password')?.value;
+    const confirm = group.get('confirmPassword')?.value;
+    return pass === confirm ? null : { passwordMismatch: true };
+  };
 
-  if (this.form.invalid) {
-    this.form.markAllAsTouched();
-    return;
+  form = this.fb.group(
+    {
+      username: ['', [Validators.required]],
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required, CustomValidators.strongPassword()]],
+      confirmPassword: ['', Validators.required]
+    },
+    { validators: this.passwordMatchValidator }
+  );
+
+  togglePassword(): void {
+    this.showPassword = !this.showPassword;
   }
 
+  submit(): void {
+    this.error.set(null);
 
-  const { username, email, password } = this.form.value;
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
+      return;
+    }
 
-  if (!username || !email || !password) {
+    const { username, email, password } = this.form.value;
+
+    if (!username || !email || !password) {
     this.error.set('Username , Email and password are required.');
     return;
   }
 
-  const loginData: SignupRequest = {
-    username,
-    email,
-    password
-  };
+    const signupData: SignupRequest = {
+      username,
+      email,
+      password
+    };
 
-  this.auth.login(loginData).subscribe({
+    this.auth.signup(signupData).subscribe({
     next: (res: Result) => {
       if (res.state) {
-        this.router.navigateByUrl('/home');
+        this.loading = true;
+          setTimeout(() => {
+            this.loading = false;
+            this.router.navigateByUrl('/login');
+          }, 4000); // wait 4 sec
       } else {
-        this.error.set(`${res.msgDesc} (code ${res.msgCode})`);
+        this.loading = true;
+        setTimeout(() => {
+            this.loading = false;
+            this.error.set(`${res.msgDesc} (code ${res.msgCode})`);
+          }, 2000); // wait 2 sec
       }
     },
-    error: () => this.error.set('Could not reach server')
-  });
-}
+      error: () => this.error.set('Could not reach server')
+    });
+  }
 }

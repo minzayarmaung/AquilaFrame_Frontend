@@ -3,24 +3,23 @@
     <h2 class="text-center mb-4">OSMS User Signup</h2>
 
     <form [formGroup]="form" (ngSubmit)="submit()">
+      <!-- Username -->
       <div class="mb-3">
         <label for="username" class="form-label">Username</label>
         <input
           id="username"
           formControlName="username"
-          type="username"
+          type="text"
           class="form-control"
           [class.is-invalid]="form.get('username')?.touched && form.get('username')?.invalid"
         />
         <div class="invalid-feedback" *ngIf="form.get('username')?.hasError('required')">
           Username is required
         </div>
-        <div class="invalid-feedback" *ngIf="form.get('username')?.hasError('username')">
-          Invalid Username
-        </div>
       </div>
 
-        <div class="mb-3">
+      <!-- Email -->
+      <div class="mb-3">
         <label for="email" class="form-label">Email address</label>
         <input
           id="email"
@@ -37,38 +36,93 @@
         </div>
       </div>
 
-      <div class="mb-3">
+      <!-- Password -->
+      <div class="mb-3 position-relative">
         <label for="password" class="form-label">Password</label>
-        <input
-          id="password"
-          formControlName="password"
-          type="password"
-          class="form-control"
-          [class.is-invalid]="form.get('password')?.touched && form.get('password')?.invalid"
-        />
+        <div class="input-group">
+          <input
+            [type]="showPassword ? 'text' : 'password'"
+            id="password"
+            formControlName="password"
+            class="form-control"
+            [class.is-invalid]="form.get('password')?.touched && form.get('password')?.invalid"
+          />
+          <button
+            type="button"
+            class="btn btn-outline-secondary"
+            (click)="showPassword = !showPassword"
+            tabindex="-1"
+          >
+            <i [class]="showPassword ? 'bi bi-eye-slash' : 'bi bi-eye'"></i>
+          </button>
+        </div>
+        <div
+          class="invalid-feedback"
+          *ngIf="
+            form.get('password')?.errors?.['weakPassword'] &&
+            (form.get('password')?.touched || form.get('password')?.dirty || form.get('password')?.invalid)
+          "
+        >
+          Password must be at least 8 characters long and contain a special character.
+        </div>
         <div class="invalid-feedback" *ngIf="form.get('password')?.hasError('required')">
           Password is required
         </div>
       </div>
 
-      <div class="text-end mb-3">
-        <a routerLink="/forgot-password" class="text-decoration-none small">Forgot Password?</a>
+      <!-- Confirm Password -->
+      <div class="mb-3 position-relative">
+        <label for="confirmPassword" class="form-label">Confirm Password</label>
+        <div class="input-group">
+          <input
+            [type]="showPassword1 ? 'text' : 'password'"
+            id="confirmPassword"
+            formControlName="confirmPassword"
+            class="form-control"
+            [class.is-invalid]="form.hasError('passwordMismatch') && form.get('confirmPassword')?.touched"
+          />
+          <button
+            type="button"
+            class="btn btn-outline-secondary"
+            (click)="showPassword1 = !showPassword1"
+            tabindex="-1"
+          >
+            <i [class]="showPassword1 ? 'bi bi-eye-slash' : 'bi bi-eye'"></i>
+          </button>
+        </div>
+        <div class="invalid-feedback" *ngIf="form.hasError('passwordMismatch') && form.get('confirmPassword')?.touched">
+          Passwords do not match
+        </div>
       </div>
 
+      <!-- Loading Spinner -->
+      <div *ngIf="loading" @fade class="loading-container text-center">
+        <img
+          src="https://lh5.googleusercontent.com/proxy/OUqG0HgVNVMNorlPCmI4VgJa-3h7uHLkkMy9vdJ0eRsQlvJBytFUS-HvuW-O9EJd-c9xB7KAqlwby4Fzp59g1705FzBuP-F8dC1ZaBQtmLeCu5i6FfSd6Mmzh8mjOwgrEYZwy5UStg"
+          alt="Loading..."
+          class="loading-gif"
+        />
+        <p>Please wait...</p>
+      </div>
 
-      <button type="submit" class="btn btn-primary w-100 mb-2" [disabled]="form.invalid">
-        Login
-      </button>
+      <!-- Submit Button -->
+      <button type="submit" class="btn btn-primary w-100">Signup</button>
+
+      <a
+        routerLink="/signup"
+        class="btn btn-outline-danger w-100 d-flex align-items-center justify-content-center gap-2 mt-2"
+      >
+        <i class="fab fa-google"></i>
+        Continue with Google
+      </a>
+
+      <a
+        routerLink="/login"
+        class="btn btn-outline-secondary w-100 d-flex align-items-center justify-content-center gap-2 mt-2"
+      >
+        Back to Login
+      </a>
     </form>
-
-    <a routerLink="/signup" class="btn btn-outline-secondary w-100">
-      Signup
-    </a>
-
-    <a routerLink="/signup" class="btn btn-outline-danger w-100 d-flex align-items-center justify-content-center gap-2 mt-2">
-      <i class="fab fa-google"></i>
-      Continue with Google
-    </a>
 
     <div *ngIf="error()" class="alert alert-danger mt-3 text-center">
       {{ error() }}
