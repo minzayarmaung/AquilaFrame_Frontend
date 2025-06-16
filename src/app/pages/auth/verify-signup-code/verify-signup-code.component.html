@@ -1,0 +1,45 @@
+<div class="container d-flex justify-content-center align-items-center min-vh-100">
+  <div class="card shadow p-4" style="max-width: 400px; width: 100%;">
+    <h4 class="text-center mb-4">Verify Your Account</h4>
+
+    <form (ngSubmit)="verifyCode()">
+      <div class="mb-3 text-center">
+        <p>We've sent a 8-digit verification code to your<b> Email.</b> Please enter it below to complete your signup.</p>
+      </div>
+
+      <div class="mb-3">
+        <label for="code" class="form-label">Verification Code</label>
+        <input
+          type="text"
+          id="code"
+          [(ngModel)]="code"
+          name="code"
+          class="form-control form-control-lg text-center"
+          required
+          minlength="8"
+          maxlength="8"
+          pattern="[0-9]{8}"
+          placeholder="e.g., 12345678"
+          autocomplete="one-time-code"
+        />
+        <div class="form-text">Enter the 6-digit code from your email.</div>
+      </div>
+
+      <button
+        type="submit"
+        class="btn btn-primary w-100 mb-3"
+        [disabled]="isVerifying"
+      >
+        <span *ngIf="isVerifying" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+        {{ isVerifying ? 'Verifying...' : 'Verify Code' }}
+      </button>
+
+      <div class="text-center mt-3">
+        <p>Didn't receive the code? <a href="#" (click)="resendCode()">Resend Code</a></p>
+        </div>
+
+      <div *ngIf="message" class="alert alert-success mt-3" role="alert">{{ message }}</div>
+      <div *ngIf="error" class="alert alert-danger mt-3" role="alert">{{ error }}</div>
+    </form>
+  </div>
+</div>

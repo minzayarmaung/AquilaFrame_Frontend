@@ -13,7 +13,7 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './verify-reset-code.component.css'
 })
 export class VerifyResetCodeComponent {
- email: string = '';
+  email: string = '';
   code: string = '';
   message: string | null = null;
   error: string | null = null;

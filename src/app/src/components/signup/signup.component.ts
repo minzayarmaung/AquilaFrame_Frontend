@@ -73,10 +73,12 @@ export class SignupComponent {
     next: (res: Result) => {
       if (res.state) {
         this.loading = true;
-          setTimeout(() => {
-            this.loading = false;
-            this.router.navigateByUrl('/login');
-          }, 4000); // wait 4 sec
+        setTimeout(() => {
+          this.loading = false;
+          this.router.navigate(['/verify-signup-code'], {
+            state: { email , username , password } // <-- send the email via route state
+          });
+        }, 1000);
       } else {
         this.loading = true;
         setTimeout(() => {

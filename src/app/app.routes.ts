@@ -7,6 +7,7 @@ import { authGuard } from './auth/auth.guard';
 import { DashboardComponent } from './src/components/dashboard/dashboard.component';
 import { VerifyResetCodeComponent } from './pages/auth/verify-reset-code/verify-reset-code.component';
 import { ResetPasswordComponent } from './pages/auth/reset-password/reset-password.component';
+import { VerifySignupCodeComponent } from './pages/auth/verify-signup-code/verify-signup-code.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -16,6 +17,7 @@ export const routes: Routes = [
   { path: 'forgot-password', component: ForgotPasswordComponent },
   { path: 'verify-code', component: VerifyResetCodeComponent },
   { path: 'reset-password', component: ResetPasswordComponent },
+  { path: 'verify-signup-code', component: VerifySignupCodeComponent },
 
   // ✅ Wildcard route must be last
   { path: '**', redirectTo: 'login' }
