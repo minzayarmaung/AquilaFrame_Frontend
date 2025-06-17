@@ -64,6 +64,7 @@ submit(): void {
   this.auth.login(loginData).subscribe({
     next: (res: Result) => {
       if (res.state) {
+        localStorage.setItem('loggedIn', 'true');
         this.loading = true;
           setTimeout(() => {
             this.loading = false;

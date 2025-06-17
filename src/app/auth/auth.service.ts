@@ -47,5 +47,9 @@ export class AuthService {
   }
 
   logout(): void { localStorage.removeItem('auth_token'); }
-  isLoggedIn(): boolean { return !!localStorage.getItem('auth_token'); }
+
+  isLoggedIn(): boolean {
+    return localStorage.getItem('loggedIn') === 'true';
+  }
+
 }

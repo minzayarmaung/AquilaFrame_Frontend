@@ -12,7 +12,7 @@ import { VerifySignupCodeComponent } from './pages/auth/verify-signup-code/verif
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
   { path: 'login', component: LoginComponent  },
-  { path: 'home', component: HomeComponent },
+  { path: 'home', component: HomeComponent , canActivate:[authGuard]},
   { path: 'signup', component: SignupComponent },
   { path: 'forgot-password', component: ForgotPasswordComponent },
   { path: 'verify-code', component: VerifyResetCodeComponent },
