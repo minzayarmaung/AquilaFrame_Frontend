@@ -25,6 +25,14 @@
         <div class="form-text">Enter the 6-digit code from your email.</div>
       </div>
 
+      <!-- Loading Spinner -->
+      <div *ngIf="loading" @fade class="loading-container text-center">
+        <img src="https://img.pikbest.com/png-images/20190918/cartoon-snail-loading-loading-gif-animation_2734139.png!bw700" alt="Loading..." class="loading-gif" />
+        <!-- <img src="https://lh5.googleusercontent.com/proxy/OUqG0HgVNVMNorlPCmI4VgJa-3h7uHLkkMy9vdJ0eRsQlvJBytFUS-HvuW-O9EJd-c9xB7KAqlwby4Fzp59g1705FzBuP-F8dC1ZaBQtmLeCu5i6FfSd6Mmzh8mjOwgrEYZwy5UStg" alt="Loading..." class="loading-gif" /> -->
+        <!-- <img src="assets/loading.gif" alt="Loading..." class="loading-gif" /> -->
+        <p>Please wait...</p>
+      </div>
+
       <button
         type="submit"
         class="btn btn-primary w-100 mb-3"
@@ -35,8 +43,17 @@
       </button>
 
       <div class="text-center mt-3">
-        <p>Didn't receive the code? <a href="#" (click)="resendCode()">Resend Code</a></p>
-        </div>
+        <p>
+          Didn't receive the code?
+          <a href="#"
+            (click)="resendCode()"
+            [class.disabled]="resendDisabled"
+            [style.pointerEvents]="resendDisabled ? 'none' : 'auto'">
+            Resend Code<span *ngIf="resendDisabled"> ({{ resendTimer }}s)</span>
+          </a>
+        </p>
+      </div>
+
 
       <div *ngIf="message" class="alert alert-success mt-3" role="alert">{{ message }}</div>
       <div *ngIf="error" class="alert alert-danger mt-3" role="alert">{{ error }}</div>

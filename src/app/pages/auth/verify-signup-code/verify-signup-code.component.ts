@@ -13,7 +13,11 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './verify-signup-code.component.css'
 })
 export class VerifySignupCodeComponent {
+  loading = false;
   isVerifying = false;
+  resendDisabled = false;
+  resendTimer: number = 0;
+  resendInterval: any;
 
   email: string = '';
   code: string = '';
@@ -30,9 +34,38 @@ export class VerifySignupCodeComponent {
     this.password = state?.password || '';
   }
 
-  resendCode() {
-    throw new Error('Method not implemented.');
+resendCode() {
+  if (this.resendDisabled) return;
+
+  this.resendDisabled = true;
+  this.resendTimer = 90;
+
+  // Optional: call resend API here if needed
+  // this.http.post<any>(environment.apiBaseUrl + '/signupController/resendSignupCode', {
+  //   email: this.email
+  // }).subscribe({
+  //   next: (res) => {
+  //     if (res.state) {
+  //       this.message = "Verification code Resent Successfully!";
+  //     } else {
+  //       this.error = res.msgDesc;
+  //     }
+  //   },
+  //   error: () => {
+  //     this.error = "Failed to resend code.";
+  //   }
+  // });
+
+  // Start countdown
+  this.resendInterval = setInterval(() => {
+    this.resendTimer--;
+
+    if (this.resendTimer <= 0) {
+      this.resendDisabled = false;
+      clearInterval(this.resendInterval);
     }
+  }, 1000);
+}
 
   verifyCode() {
     this.message = null;
@@ -42,12 +75,15 @@ export class VerifySignupCodeComponent {
       email: this.email,
       username : this.username,
       password : this.password,
+
       code: this.code,
     }).subscribe({
       next: (res) => {
         if (res.state) {
           localStorage.setItem('reset_email', this.email); // store temporarily
+          setTimeout(() => {
           this.router.navigate(['/login']);
+          }, 6000); // wait 2 sec
         } else {
           this.error = res.msgDesc;
         }
