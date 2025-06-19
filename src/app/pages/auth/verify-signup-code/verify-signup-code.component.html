@@ -45,12 +45,12 @@
       <div class="text-center mt-3">
         <p>
           Didn't receive the code?
-          <a href="#"
+          <button
+            class="btn btn-link p-0 align-baseline"
             (click)="resendCode()"
-            [class.disabled]="resendDisabled"
-            [style.pointerEvents]="resendDisabled ? 'none' : 'auto'">
+            [disabled]="resendDisabled">
             Resend Code<span *ngIf="resendDisabled"> ({{ resendTimer }}s)</span>
-          </a>
+          </button>
         </p>
       </div>
 

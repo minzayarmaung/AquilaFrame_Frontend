@@ -19,8 +19,8 @@ export interface LoginResponse { token: string; user: { id: string; email: strin
 
 export interface Result {
   state: boolean;
+  msgCode: string | null;
   msgDesc: string;
-  msgCode: string;
 }
 
 @Injectable({ providedIn: 'root' })

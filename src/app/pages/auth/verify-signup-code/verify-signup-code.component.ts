@@ -40,21 +40,21 @@ resendCode() {
   this.resendDisabled = true;
   this.resendTimer = 90;
 
-  // Optional: call resend API here if needed
-  // this.http.post<any>(environment.apiBaseUrl + '/signupController/resendSignupCode', {
-  //   email: this.email
-  // }).subscribe({
-  //   next: (res) => {
-  //     if (res.state) {
-  //       this.message = "Verification code Resent Successfully!";
-  //     } else {
-  //       this.error = res.msgDesc;
-  //     }
-  //   },
-  //   error: () => {
-  //     this.error = "Failed to resend code.";
-  //   }
-  // });
+  //Optional: call resend API here if needed
+  this.http.post<any>(environment.apiBaseUrl + '/signupController/resendSignupCode', {
+    email: this.email
+  }).subscribe({
+    next: (res) => {
+      if (res.state) {
+        this.message = "Verification code Resent Successfully!";
+      } else {
+        this.error = res.msgDesc;
+      }
+    },
+    error: () => {
+      this.error = "Failed to resend code.";
+    }
+  });
 
   // Start countdown
   this.resendInterval = setInterval(() => {

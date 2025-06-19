@@ -1,0 +1,85 @@
+<div class="card shadow-sm p-4 position-relative">
+  <h5 class="mb-4">Create New Table</h5>
+
+  <!-- Spinner Overlay -->
+  <div *ngIf="isSubmitting" class="spinner-overlay d-flex justify-content-center align-items-center">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+
+    <!-- Toast-style Alert -->
+    <div
+      *ngIf="showAlert"
+      class="alert position-absolute top-0 end-0 m-3 d-flex align-items-center gap-2"
+      [ngClass]="{
+        'alert-success': alertType === 'success',
+        'alert-danger': alertType === 'error'
+      }"
+      role="alert"
+      style="z-index: 1055;"
+    >
+      <span>{{ alertMessage }}</span>
+      <span *ngIf="isSubmitting" class="dot-loader">
+        <span>.</span><span>.</span><span>.</span>
+      </span>
+    </div>
+
+
+  <form [formGroup]="tableForm" (ngSubmit)="createTable()">
+    <!-- Table Name -->
+    <div class="row mb-3">
+      <div class="col-md-6">
+        <label class="form-label">Table Name</label>
+        <input class="form-control" formControlName="tableName" placeholder="Enter table name" />
+      </div>
+    </div>
+
+    <!-- Columns -->
+        <div formArrayName="columns">
+        <div
+          *ngFor="let col of columns.controls; let i = index"
+          [formGroupName]="i"
+          class="row align-items-center mb-2"
+        >
+          <div class="col-md-4">
+            <input class="form-control" formControlName="name" placeholder="Column Name" />
+          </div>
+
+          <div class="col-md-3">
+            <select class="form-select" formControlName="type">
+              <option value="">Select Type</option>
+              <option *ngFor="let type of dataTypes" [value]="type">{{ type }}</option>
+            </select>
+          </div>
+
+
+          <div class="col-md-5 d-flex gap-3 align-items-center">
+
+          <div class="form-check form-switch">
+              <input class="form-check-input" type="checkbox" id="notNullyToggleBootstrap" formControlName="isNotNull" />
+              <label class="form-check-label" for="notNullyToggleBootstrap">NOT NULL ?</label>
+          </div>
+
+            <div class="form-check form-switch">
+              <input class="form-check-input" type="checkbox" id="primaryKeyToggleBootstrap" formControlName="isPrimaryKey" />
+              <label class="form-check-label" for="primaryKeyToggleBootstrap">PRIMARY KEY ?</label>
+            </div>
+
+            <button type="button" class="btn btn-outline-danger btn-sm" (click)="removeColumn(i)">
+              Remove
+            </button>
+          </div>
+        </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="d-flex gap-2 mt-4">
+      <button type="button" class="btn btn-outline-secondary" (click)="addColumn()">+ Add Column</button>
+      <button type="submit" class="btn btn-primary" [disabled]="isSubmitting">
+        {{ isSubmitting ? 'Creating...' : 'Create Table' }}
+      </button>
+
+    </div>
+  </form>
+</div>

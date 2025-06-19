@@ -8,6 +8,7 @@ import { DashboardComponent } from './src/components/dashboard/dashboard.compone
 import { VerifyResetCodeComponent } from './pages/auth/verify-reset-code/verify-reset-code.component';
 import { ResetPasswordComponent } from './pages/auth/reset-password/reset-password.component';
 import { VerifySignupCodeComponent } from './pages/auth/verify-signup-code/verify-signup-code.component';
+import { UserTablesComponent } from './src/components/user-tables/user-tables.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -17,7 +18,8 @@ export const routes: Routes = [
   { path: 'forgot-password', component: ForgotPasswordComponent },
   { path: 'verify-code', component: VerifyResetCodeComponent },
   { path: 'reset-password', component: ResetPasswordComponent },
-  { path: 'verify-signup-code', component: VerifySignupCodeComponent },
+  { path: 'verify-signup-code', component: VerifySignupCodeComponent},
+  { path: 'user-tables', component: UserTablesComponent , canActivate: [authGuard]},
 
   // ✅ Wildcard route must be last
   { path: '**', redirectTo: 'login' }

@@ -3,35 +3,44 @@
     <i class="bi bi-list icon"></i>
     <span *ngIf="!isSidebarClosed">Toggle Sidebar</span>
   </button>
+
+  <br>
+
   <ul class="nav nav-pills flex-column mb-auto">
     <li class="nav-item">
-      <a href="/home" class="nav-link" aria-current="page">
+      <a routerLink="/home" routerLinkActive="active" class="nav-link" aria-current="page">
         <i class="bi bi-house-door icon"></i>
         <span *ngIf="!isSidebarClosed">Dashboard</span>
       </a>
     </li>
     <li>
-      <a href="#" class="nav-link link-dark">
+      <a routerLink="/orders" routerLinkActive="active" class="nav-link link-dark">
         <i class="bi bi-box-seam icon"></i>
         <span *ngIf="!isSidebarClosed">Orders</span>
       </a>
     </li>
     <li>
-      <a href="#" class="nav-link link-dark">
+      <a routerLink="/products" routerLinkActive="active" class="nav-link link-dark">
         <i class="bi bi-cart icon"></i>
         <span *ngIf="!isSidebarClosed">Products</span>
       </a>
     </li>
     <li>
-      <a href="#" class="nav-link link-dark">
+      <a routerLink="/customers" routerLinkActive="active" class="nav-link link-dark">
         <i class="bi bi-people icon"></i>
         <span *ngIf="!isSidebarClosed">Customers</span>
       </a>
     </li>
     <li>
-      <a href="#" class="nav-link link-dark">
+      <a routerLink="/reports" routerLinkActive="active" class="nav-link link-dark">
         <i class="bi bi-file-earmark-text icon"></i>
         <span *ngIf="!isSidebarClosed">Reports</span>
+      </a>
+    </li>
+    <li>
+      <a routerLink="/user-tables" routerLinkActive="active" class="nav-link link-dark">
+        <i class="bi bi-table"></i>
+        <span *ngIf="!isSidebarClosed">Tables</span>
       </a>
     </li>
   </ul>
