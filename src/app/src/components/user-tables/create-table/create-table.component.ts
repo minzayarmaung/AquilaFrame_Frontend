@@ -50,10 +50,10 @@ createTable() {
 
   this.isSubmitting = true;
   this.alertMessage = 'Creating Table...';
-  this.alertType = 'success'; // Use neutral or info type if desired
+  this.alertType = 'success'; 
   this.showAlert = true;
 
-  // Wait 5 seconds to simulate loading/creating delay
+
   setTimeout(() => {
     this.http.post<Result>(this.baseUrl + '/tableController/createTable', this.tableForm.value).subscribe({
       next: (res) => {
