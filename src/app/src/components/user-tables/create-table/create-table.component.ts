@@ -4,6 +4,7 @@ import { Component } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { environment } from '../../../environments/environment';
 import { Result } from '../../../../auth/auth.service';
+import { Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-create-table',
@@ -13,6 +14,7 @@ import { Result } from '../../../../auth/auth.service';
   styleUrl: './create-table.component.css'
 })
 export class CreateTableComponent {
+  @Output() tableCreated = new EventEmitter<void>();
   isSubmitting = false;
   showAlert = false;
   alertMessage = '';
@@ -48,11 +50,27 @@ export class CreateTableComponent {
 createTable() {
   if (this.tableForm.invalid || this.isSubmitting) return;
 
-  this.isSubmitting = true;
-  this.alertMessage = 'Creating Table...';
-  this.alertType = 'success'; 
-  this.showAlert = true;
+  const columnNames = this.columns.controls.map(c => c.get('name')?.value?.trim());
+  const duplicates = columnNames.filter((name, idx) => columnNames.indexOf(name) !== idx);
 
+  if (duplicates.length > 0) {
+    this.alertType = 'error';
+    this.alertMessage = `Duplicate column names: ${[...new Set(duplicates)].join(', ')}`;
+    this.showAlert = true;
+    this.isSubmitting = false;
+
+    setTimeout(() => {
+      this.showAlert = false;
+    }, 3000);
+
+    return;
+  }
+
+  // Continue normally
+  this.isSubmitting = true;
+  this.alertMessage = 'Creating Table';
+  this.alertType = 'success';
+  this.showAlert = true;
 
   setTimeout(() => {
     this.http.post<Result>(this.baseUrl + '/tableController/createTable', this.tableForm.value).subscribe({
@@ -61,12 +79,13 @@ createTable() {
         this.alertMessage = res.msgDesc || (res.state ? 'Table created successfully!' : 'Failed to create table.');
 
         if (res.state) {
+          this.tableCreated.emit(); 
           this.tableForm.reset();
           this.columns.clear();
-          this.addColumn(); // add one row back
+          this.addColumn();
         }
 
-        this.showTemporaryAlert(); // Hides after a short delay
+        this.showTemporaryAlert();
       },
       error: (err) => {
         this.alertType = 'error';
@@ -74,8 +93,11 @@ createTable() {
         this.showTemporaryAlert();
       }
     });
-  }, 3000); // Simulate 5 seconds loading
+  }, 3000);
 }
+
+
+
 
 showTemporaryAlert() {
   this.showAlert = true;
