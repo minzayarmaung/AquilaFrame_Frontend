@@ -19,7 +19,7 @@
       role="alert"
       style="z-index: 1055;"
     >
-      <span>{{ alertMessage }}</span> <!-- ✅ this is crucial -->
+      <span>{{ alertMessage }}</span> 
       <span *ngIf="isSubmitting" class="dot-loader">
         <span>.</span><span>.</span><span>.</span>
       </span>
@@ -92,10 +92,6 @@
     </div>
   </div>
 </div>
-
-
-
-
 
     <!-- Action Buttons -->
     <div class="d-flex gap-2 mt-4">

@@ -41,9 +41,15 @@ fetchTables() {
   });
 }
 
+openCreateModal() {
+  this.selectedTable = null; 
+  this.showCreateModal = true;
+}
+
+
 onTableCreated() {
   this.showCreateModal = false;
-  this.fetchTables(); // Refresh after new table created
+  this.fetchTables(); 
 }
 
 confirmDelete(table: string) {

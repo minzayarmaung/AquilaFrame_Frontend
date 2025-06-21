@@ -22,7 +22,7 @@ export class CreateTableComponent {
   @Input() tableName: string | null = null;
   private baseUrl = environment.apiBaseUrl;
   tableForm: FormGroup;
-    dataTypes = ['VARCHAR', 'TEXT', 'INT', 'BIGINT', 'BOOLEAN', 'DATE', 'TIMESTAMP'];
+    dataTypes = ['VARCHAR', 'TEXT', 'INT', 'BIGINT', 'BOOLEAN', 'DATE', 'TIMESTAMP','CHARACTER' , 'CHAR'];
     message: string = '';
     error: string = '';
 
@@ -35,10 +35,20 @@ export class CreateTableComponent {
     });
   }
 
-  ngOnChanges(changes: SimpleChanges) {
-  if (changes['tableName'] && this.tableName) {
-    this.loadTableData(this.tableName);
+ngOnChanges(changes: SimpleChanges) {
+  if (changes['tableName']) {
+    if (this.tableName) {
+      this.loadTableData(this.tableName);
+    } else {
+      this.resetForm(); // 👈 New table flow
+    }
   }
+}
+
+resetForm() {
+  this.tableForm.reset();
+  this.columns.clear();
+  this.addColumn();
 }
 
   get columns(): FormArray {
@@ -72,7 +82,6 @@ createTable() {
     return;
   }
 
-  // Continue normally
   this.isSubmitting = true;
   this.alertMessage = 'Creating Table';
   this.alertType = 'success';
@@ -124,7 +133,7 @@ showTemporaryAlert() {
   setTimeout(() => {
     this.showAlert = false;
     this.isSubmitting = false;
-  }, 3000); // show the success/fail message for 3 seconds
+  }, 3000); 
 }
 
 }
