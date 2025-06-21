@@ -24,6 +24,11 @@ showCreateModal = false;
     this.fetchTables();
   }
 
+  openEditModal(tableName: string) {
+  this.selectedTable = tableName;
+  this.showCreateModal = true;
+}
+
 
 ngOnInit() {
   this.fetchTables();

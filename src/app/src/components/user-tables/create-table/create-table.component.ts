@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { Component } from '@angular/core';
+import { Component, Input, SimpleChanges } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { environment } from '../../../environments/environment';
 import { Result } from '../../../../auth/auth.service';
@@ -19,7 +19,7 @@ export class CreateTableComponent {
   showAlert = false;
   alertMessage = '';
   alertType: 'success' | 'error' = 'success';
-
+  @Input() tableName: string | null = null;
   private baseUrl = environment.apiBaseUrl;
   tableForm: FormGroup;
     dataTypes = ['VARCHAR', 'TEXT', 'INT', 'BIGINT', 'BOOLEAN', 'DATE', 'TIMESTAMP'];
@@ -34,6 +34,12 @@ export class CreateTableComponent {
       ])
     });
   }
+
+  ngOnChanges(changes: SimpleChanges) {
+  if (changes['tableName'] && this.tableName) {
+    this.loadTableData(this.tableName);
+  }
+}
 
   get columns(): FormArray {
     return this.tableForm.get('columns') as FormArray;
@@ -96,8 +102,21 @@ createTable() {
   }, 3000);
 }
 
-
-
+loadTableData(tableName: string) {
+  this.http.get<any>(`${this.baseUrl}/tableController/getTableDetails?name=${tableName}`)
+    .subscribe(data => {
+      this.tableForm.patchValue({ tableName: data.tableName });
+      this.columns.clear();
+      data.columns.forEach((col: { name: any; type: any; isPrimaryKey: any; isNotNull: any; }) => {
+        this.columns.push(this.fb.group({
+          name: [col.name, Validators.required],
+          type: [col.type, Validators.required],
+          isPrimaryKey: [col.isPrimaryKey],
+          isNotNull: [col.isNotNull]
+        }));
+      });
+    });
+}
 
 showTemporaryAlert() {
   this.showAlert = true;
