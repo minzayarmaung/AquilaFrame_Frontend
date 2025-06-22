@@ -61,24 +61,26 @@ submit(): void {
     password
   };
 
-  this.auth.login(loginData).subscribe({
-    next: (res: Result) => {
-      if (res.state) {
-        localStorage.setItem('loggedIn', 'true');
-        this.loading = true;
-          setTimeout(() => {
-            this.loading = false;
-            this.router.navigateByUrl('/home');
-          }, 4000); // wait 2 sec
-      } else {
-        this.loading = true;
-        setTimeout(() => {
-            this.loading = false;
-            this.error.set(`${res.msgDesc} (code ${res.msgCode})`);
-          }, 2000); // wait 2 sec
-      }
-    },
-    error: () => this.error.set('Could not reach server')
-  });
+this.auth.login(loginData).subscribe({
+  next: (res: Result) => {
+    if (res.state) {
+      localStorage.setItem('loggedIn', 'true');
+      this.loading = true;
+      setTimeout(() => {
+        this.loading = false;
+        this.router.navigate(['/home'], {
+          state: { email, password }
+        });
+      }, 4000); // wait 4 sec
+    } else {
+      this.loading = true;
+      setTimeout(() => {
+        this.loading = false;
+        this.error.set(`${res.msgDesc} (code ${res.msgCode})`);
+      }, 2000); // wait 2 sec
+    }
+  },
+  error: () => this.error.set('Could not reach server')
+});
 }
 }

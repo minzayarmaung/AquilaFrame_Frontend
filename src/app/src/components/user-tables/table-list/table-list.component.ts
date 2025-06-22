@@ -35,7 +35,6 @@ openEditModal(tableName: string) {
   });
 }
 
-
 ngOnInit() {
   this.fetchTables();
 }
