@@ -23,7 +23,7 @@ export class CreateTableComponent {
   @Input() isUpdate: boolean = false; 
   private baseUrl = environment.apiBaseUrl;
   tableForm: FormGroup;
-    dataTypes = ['VARCHAR', 'TEXT', 'INT', 'BIGINT', 'BOOLEAN', 'DATE', 'TIMESTAMP','CHARACTER' , 'CHAR'];
+    dataTypes = ['VARCHAR', 'TEXT', 'INT', 'BIGINT', 'BOOLEAN', 'DATE', 'TIMESTAMP','CHARACTER' , 'CHAR' , 'CHARACTER VARYING'];
     message: string = '';
     error: string = '';
 
@@ -128,12 +128,12 @@ loadTableData(tableName: string) {
     .subscribe(data => {
       this.tableForm.patchValue({ tableName: data.tableName });
       this.columns.clear();
-      data.columns.forEach((col: { name: any; type: any; isPrimaryKey: any; isNotNull: any; }) => {
+      data.columns.forEach((col: { name: any; type: any; primaryKey: any; notNull: any; }) => {
         this.columns.push(this.fb.group({
           name: [col.name, Validators.required],
           type: [col.type, Validators.required],
-          isPrimaryKey: [!!col.isPrimaryKey], 
-          isNotNull: [!!col.isNotNull]        
+          isPrimaryKey: [!!col.primaryKey], 
+          isNotNull: [!!col.notNull]        
         }));
       });
     });
