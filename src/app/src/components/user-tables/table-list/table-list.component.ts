@@ -4,6 +4,7 @@ import { CreateTableComponent } from '../create-table/create-table.component';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 import { Result } from '../../../../auth/auth.service';
+import { OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-table-list',
@@ -17,6 +18,7 @@ isDeleting = false;
 showDeleteModal = false;
 selectedTable: string | null = null;
 private baseUrl = environment.apiBaseUrl;
+isUpdate: boolean = false;
 tables: string[] = [];
 showCreateModal = false;
 
@@ -24,9 +26,13 @@ showCreateModal = false;
     this.fetchTables();
   }
 
-  openEditModal(tableName: string) {
-  this.selectedTable = tableName;
-  this.showCreateModal = true;
+openEditModal(tableName: string) {
+  this.isUpdate = false;
+  setTimeout(() => {
+    this.isUpdate = true;
+    this.selectedTable = tableName;
+    this.showCreateModal = true;
+  });
 }
 
 
@@ -36,16 +42,21 @@ ngOnInit() {
 
 fetchTables() {
   this.http.get<string[]>(this.baseUrl + '/tableController/showTables').subscribe({
-    next: (res) => this.tables = res,
-    error: (err) => console.error('Error loading tables', err)
+    next: (res) => {
+      this.tables = res;
+    },
+    error: (err) => {
+      console.error('Error loading tables', err);
+    }
   });
 }
 
+
 openCreateModal() {
-  this.selectedTable = null; 
+  this.isUpdate = false; 
+  this.selectedTable = null;
   this.showCreateModal = true;
 }
-
 
 onTableCreated() {
   this.showCreateModal = false;

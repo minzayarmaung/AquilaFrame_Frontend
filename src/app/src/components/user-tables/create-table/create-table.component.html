@@ -97,7 +97,7 @@
     <div class="d-flex gap-2 mt-4">
       <button type="button" class="btn btn-outline-secondary" (click)="addColumn()">+ Add Column</button>
       <button type="submit" class="btn btn-primary" [disabled]="isSubmitting">
-        {{ isSubmitting ? 'Creating...' : 'Create Table' }}
+        {{ isSubmitting ? (isUpdate ? 'Updating...' : 'Creating...') : (isUpdate ? 'Update Table' : 'Create Table') }}
       </button>
 
     </div>

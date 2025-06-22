@@ -20,6 +20,7 @@ export class CreateTableComponent {
   alertMessage = '';
   alertType: 'success' | 'error' = 'success';
   @Input() tableName: string | null = null;
+  @Input() isUpdate: boolean = false; 
   private baseUrl = environment.apiBaseUrl;
   tableForm: FormGroup;
     dataTypes = ['VARCHAR', 'TEXT', 'INT', 'BIGINT', 'BOOLEAN', 'DATE', 'TIMESTAMP','CHARACTER' , 'CHAR'];
@@ -36,11 +37,11 @@ export class CreateTableComponent {
   }
 
 ngOnChanges(changes: SimpleChanges) {
-  if (changes['tableName']) {
-    if (this.tableName) {
+  if (changes['tableName'] || changes['isUpdate']) {
+    if (this.tableName && this.isUpdate) {
       this.loadTableData(this.tableName);
     } else {
-      this.resetForm(); // 👈 New table flow
+      this.resetForm();
     }
   }
 }
@@ -55,15 +56,21 @@ resetForm() {
     return this.tableForm.get('columns') as FormArray;
   }
 
-  addColumn() {
-    this.columns.push(this.fb.group({ name: ['', Validators.required], type: ['', Validators.required] , isPrimaryKey: [false] , isNotNull : [false] }));
-  }
+addColumn(name = '', type = '', isPrimaryKey = false, isNotNull = false) {
+  this.columns.push(this.fb.group({
+    name: [name, Validators.required],
+    type: [type, Validators.required],
+    isPrimaryKey: [isPrimaryKey],
+    isNotNull: [isNotNull]
+  }));
+}
+
 
   removeColumn(index: number) {
     this.columns.removeAt(index);
   }
 
-createTable() {
+  createTable() {
   if (this.tableForm.invalid || this.isSubmitting) return;
 
   const columnNames = this.columns.controls.map(c => c.get('name')?.value?.trim());
@@ -87,8 +94,13 @@ createTable() {
   this.alertType = 'success';
   this.showAlert = true;
 
+  const payload = {
+    ...this.tableForm.value,
+    isUpdate: this.isUpdate
+  };
+
   setTimeout(() => {
-    this.http.post<Result>(this.baseUrl + '/tableController/createTable', this.tableForm.value).subscribe({
+    this.http.post<Result>(this.baseUrl + '/tableController/createTable', payload).subscribe({
       next: (res) => {
         this.alertType = res.state ? 'success' : 'error';
         this.alertMessage = res.msgDesc || (res.state ? 'Table created successfully!' : 'Failed to create table.');
@@ -120,8 +132,8 @@ loadTableData(tableName: string) {
         this.columns.push(this.fb.group({
           name: [col.name, Validators.required],
           type: [col.type, Validators.required],
-          isPrimaryKey: [col.isPrimaryKey],
-          isNotNull: [col.isNotNull]
+          isPrimaryKey: [!!col.isPrimaryKey], 
+          isNotNull: [!!col.isNotNull]        
         }));
       });
     });

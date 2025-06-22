@@ -76,7 +76,7 @@ export class SignupComponent {
         setTimeout(() => {
           this.loading = false;
           this.router.navigate(['/verify-signup-code'], {
-            state: { email , username , password } // <-- send the email via route state
+            state: { email , username , password } 
           });
         }, 1000);
       } else {
@@ -84,7 +84,7 @@ export class SignupComponent {
         setTimeout(() => {
             this.loading = false;
             this.error.set(`${res.msgDesc} (code ${res.msgCode})`);
-          }, 2000); // wait 2 sec
+          }, 2000); 
       }
     },
       error: () => this.error.set('Could not reach server')
