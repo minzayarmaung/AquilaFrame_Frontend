@@ -21,6 +21,7 @@ export interface Result {
   state: boolean;
   msgCode: string | null;
   msgDesc: string;
+  token: string; 
 }
 
 @Injectable({ providedIn: 'root' })
@@ -34,6 +35,7 @@ export class AuthService {
     return this.http.post<Result>(this.loginApi, body).pipe(
       tap(res => {
         if (res.state) sessionStorage.setItem('auth_state', 'true');
+        localStorage.setItem('auth_token', res.token);
       })
     );
   }
