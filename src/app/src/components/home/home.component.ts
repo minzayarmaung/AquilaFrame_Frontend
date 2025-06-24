@@ -16,8 +16,8 @@ declare var bootstrap: any;
   styleUrl: './home.component.css'
 })
 export class HomeComponent {
-  username: string = ''; 
-  userdata: any = {}; 
+  username: string = '';
+  userdata: any = {};
   email: string = '';
   password: string = '';
   private baseUrl = environment.apiBaseUrl;
@@ -45,15 +45,15 @@ export class HomeComponent {
   getUserData(){
     const payload = { email: this.email };
 
-    this.http.post<any>(this.baseUrl + '/userController/getUserData' , payload).subscribe({
+    this.http.post<any>(this.baseUrl + '/userController/getUserData', {}).subscribe({
       next: (res) => {
         this.userdata = res;
         this.username = res.username;
       },
       error: (err) => {
-        console.log('Error Getting Userdata',err);
+        console.log('Error Getting Userdata', err);
       }
-    })
+    });
   }
 
   handleSidebarToggle(isClosed: boolean) {
