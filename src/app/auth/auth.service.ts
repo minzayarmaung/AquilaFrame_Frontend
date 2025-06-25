@@ -21,7 +21,7 @@ export interface Result {
   state: boolean;
   msgCode: string | null;
   msgDesc: string;
-  token: string; 
+  token: string;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -32,6 +32,9 @@ export class AuthService {
   private signupApi = this.baseUrl + '/signupController/signup'
 
   login(body: LoginRequest): Observable<Result> {
+
+    // To Clean the Old Token.
+    localStorage.removeItem('auth_token');
     return this.http.post<Result>(this.loginApi, body).pipe(
       tap(res => {
         if (res.state) sessionStorage.setItem('auth_state', 'true');
@@ -41,6 +44,7 @@ export class AuthService {
   }
 
   signup(body: SignupRequest): Observable<Result> {
+    localStorage.removeItem('auth_token');
     return this.http.post<Result>(this.signupApi, body).pipe(
       tap(res => {
         if (res.state) sessionStorage.setItem('auth_state', 'true');

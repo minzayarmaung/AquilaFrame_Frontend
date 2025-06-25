@@ -45,7 +45,7 @@ export class HomeComponent {
   getUserData(){
     const payload = { email: this.email };
 
-    this.http.post<any>(this.baseUrl + '/userController/getUserData', {}).subscribe({
+    this.http.post<any>(this.baseUrl + '/userController/getUserData', payload).subscribe({
       next: (res) => {
         this.userdata = res;
         this.username = res.username;
