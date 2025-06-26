@@ -6,19 +6,21 @@ export interface User {
   id: number;
   username: string;
   email: string;
+  phone: string;
   createddate: string;
   enabled: boolean;
   roles: string[];
   usageDays: number;
-  status: boolean;
+  status: number;
   usageAge?: string; // Added optional property for calculated usage age
   n1: number;
   role?: string;
+  userStatus?: boolean;
 
 }
 
 @Injectable({ providedIn: 'root' })
-export class UserService {
+export class userService {
   private api = environment.apiBaseUrl + '/userController/getAllUsers';
 
   constructor(private http: HttpClient) {}

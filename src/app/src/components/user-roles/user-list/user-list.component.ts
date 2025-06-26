@@ -1,7 +1,7 @@
 import { Component, inject, NgModule } from '@angular/core';
-import { User, UserService } from '../../../services/UserService';
 import { NgModel, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { User, userService } from '../../../services/UserService';
 
 @Component({
   selector: 'app-user-list',
@@ -13,18 +13,24 @@ import { CommonModule } from '@angular/common';
 export class UserListComponent {
   users: User[] = [];
 
-  constructor(private userService: UserService) {}
+  constructor(private userService: userService) {}
 
   ngOnInit() {
     this.userService.getAllUsers().subscribe(data => {
       this.users = data.map(user => {
         const role = this.getRole(user.n1);
+        const userStatus = this.getStatus(user.status);
         const createdDate = this.parseDate(user.createddate);
         const today = new Date();
         const usageAge = this.getUsageAge(createdDate, today);
-        return { ...user, usageAge , role };
+        console.log(user)
+        return { ...user, usageAge , role , userStatus};
       });
     });
+  }
+
+  getStatus(status: number): boolean {
+    return status === 1;
   }
 
   getRole(role: number): any {

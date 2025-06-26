@@ -6,9 +6,10 @@
 <table class="table table-bordered table-hover table-striped">
   <thead class="table-dark">
     <tr>
-      <th>#</th>
+      <th>No</th>
       <th>Username</th>
       <th>Email</th>
+      <th>Phone</th>
       <th>Roles</th>
       <th>Status</th>
       <th>Usage Age</th>
@@ -19,13 +20,14 @@
       <td>{{ i + 1 }}</td>
       <td>{{ user.username }}</td>
       <td>{{ user.email }}</td>
+      <td>{{ user.phone }}</td>
       <td>
         {{ user.role }}
         <!-- <span class="badge bg-secondary me-1" *ngFor="let role of user.role">{{ role }}</span> -->
       </td>
       <td>
-        <span class="badge" [ngClass]="user.enabled ? 'bg-success' : 'bg-danger'">
-          {{ user.enabled ? 'Active' : 'Disabled' }}
+        <span class="badge" [ngClass]="user.userStatus ? 'bg-success' : 'bg-danger'">
+          {{ user.userStatus ? 'Active' : 'Disabled' }}
         </span>
       </td>
       <td>{{ user.usageAge }}</td>
