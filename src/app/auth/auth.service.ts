@@ -52,6 +52,26 @@ export class AuthService {
     );
   }
 
+  // auth.service.ts
+  hasPermission(permission: string): boolean {
+  const userPermissions = this.getUserPermissions();
+  return userPermissions.includes(permission);
+}
+
+  getUserPermissions(): string[] {
+  // You should ideally decode token here and extract permissions.
+  const token = localStorage.getItem('auth_token');
+  if (!token) return [];
+
+  try {
+    const payload = JSON.parse(atob(token.split('.')[1]));
+    return payload.permissions || [];
+  } catch (e) {
+    return [];
+  }
+}
+
+
   logout(): void { localStorage.removeItem('auth_token'); }
 
   isLoggedIn(): boolean {
