@@ -1,0 +1,28 @@
+<form [formGroup]="form" (ngSubmit)="submit()" class="p-3 bg-light rounded shadow-sm">
+  <div class="mb-2">
+    <label class="form-label">Username</label>
+    <input class="form-control" formControlName="username" />
+  </div>
+
+  <div class="mb-2">
+    <label class="form-label">Email</label>
+    <input class="form-control" formControlName="email" type="email" />
+  </div>
+
+  <div class="mb-2">
+    <label class="form-label">Password</label>
+    <input class="form-control" formControlName="password" type="password" />
+  </div>
+
+  <div class="mb-2">
+    <label class="form-label">Roles</label>
+    <div class="form-check form-check-inline" *ngFor="let role of allRoles">
+      <input type="checkbox" class="form-check-input" [value]="role" (change)="onCheckboxChange($event)" />
+      <label class="form-check-label">{{ role }}</label>
+    </div>
+  </div>
+
+  <div class="d-grid mt-3">
+    <button class="btn btn-success" type="submit" [disabled]="form.invalid">Create User</button>
+  </div>
+</form>
