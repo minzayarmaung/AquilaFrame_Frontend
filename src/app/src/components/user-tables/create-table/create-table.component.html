@@ -1,105 +1,165 @@
-<div class="card shadow-sm p-4 position-relative">
-  <!-- <h5 class="mb-4">Create New Table</h5> -->
+<!-- Modern Form Card -->
+<div class="card border-0 shadow-lg position-relative rounded-4"
+     style="background: rgba(255,255,255,0.95); backdrop-filter: blur(20px);">
 
-  <!-- Spinner Overlay -->
-  <div *ngIf="isSubmitting" class="spinner-overlay d-flex justify-content-center align-items-center">
-    <div class="spinner-border text-primary" role="status">
-      <span class="visually-hidden">Loading...</span>
+  <!-- Glassmorphism Spinner Overlay -->
+  <div *ngIf="isSubmitting" class="spinner-overlay d-flex justify-content-center align-items-center rounded-4"
+       style="background: rgba(255,255,255,0.9); backdrop-filter: blur(10px);">
+    <div class="d-flex flex-column align-items-center">
+      <div class="spinner-border mb-3" style="color: #667eea;" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+      <p class="text-muted fw-semibold">{{ isUpdate ? 'Updating table...' : 'Creating table...' }}</p>
     </div>
   </div>
 
-    <!-- Toast-style Alert -->
-    <div
-      *ngIf="showAlert"
-      class="alert position-absolute top-0 end-0 m-3 d-flex align-items-center gap-2"
-      [ngClass]="{
-        'alert-success': alertType === 'success',
-        'alert-danger': alertType === 'error'
-      }"
-      role="alert"
-      style="z-index: 1055;"
-    >
-      <span>{{ alertMessage }}</span> 
-      <span *ngIf="isSubmitting" class="dot-loader">
-        <span>.</span><span>.</span><span>.</span>
-      </span>
-    </div>
+  <!-- Modern Toast Alert -->
+  <div *ngIf="showAlert"
+       class="alert position-absolute top-0 end-0 m-4 d-flex align-items-center gap-2 border-0 rounded-pill shadow-lg"
+       [ngClass]="{
+         'alert-success': alertType === 'success',
+         'alert-danger': alertType === 'error'
+       }"
+       role="alert"
+       style="z-index: 1055; backdrop-filter: blur(10px);">
+    <i class="bi" [ngClass]="{
+      'bi-check-circle-fill': alertType === 'success',
+      'bi-exclamation-triangle-fill': alertType === 'error'
+    }"></i>
+    <span class="fw-semibold">{{ alertMessage }}</span>
+    <span *ngIf="isSubmitting" class="dot-loader">
+      <span>.</span><span>.</span><span>.</span>
+    </span>
+  </div>
 
-  <form [formGroup]="tableForm" (ngSubmit)="createTable()">
-    <!-- Table Name -->
-    <div class="row mb-3">
-      <div class="col-md-6">
-        <label class="form-label">Table Name</label>
-        <input class="form-control" formControlName="tableName" placeholder="Enter table name" />
-      </div>
-    </div>
+  <div class="card-body p-5">
+    <form [formGroup]="tableForm" (ngSubmit)="createTable()">
 
-<!-- Columns -->
-<div formArrayName="columns">
-  <div
-    *ngFor="let col of columns.controls; let i = index"
-    [formGroupName]="i"
-    class="row g-2 align-items-end mb-3 border-bottom pb-3"
-  >
-    <div class="col-md-4">
-      <label class="form-label">Column Name</label>
-      <input class="form-control" formControlName="name" placeholder="Column Name" />
-    </div>
-
-    <div class="col-md-4">
-      <label class="form-label">Data Type</label>
-      <select class="form-select" formControlName="type">
-        <option value="">Select Type</option>
-        <option *ngFor="let type of dataTypes" [value]="type">{{ type }}</option>
-      </select>
-    </div>
-
-    <!-- Consolidated column for switches + Remove button -->
-    <div class="col-md-4">
-      <div class="d-flex align-items-center justify-content-between">
-        <!-- Switches group -->
-        <div class="d-flex align-items-center">
-          <div class="form-check form-switch me-4">
-            <input
-              class="form-check-input"
-              type="checkbox"
-              [id]="'notNull-' + i"
-              formControlName="isNotNull"
-            />
-            <label class="form-check-label" [for]="'notNull-' + i">NOT NULL</label>
-          </div>
-
-          <div class="form-check form-switch me-4">
-            <input
-              class="form-check-input"
-              type="checkbox"
-              [id]="'pk-' + i"
-              formControlName="isPrimaryKey"
-            />
-            <label class="form-check-label" [for]="'pk-' + i">PRIMARY KEY</label>
+      <!-- Modern Table Name Section -->
+      <div class="mb-5">
+        <div class="row">
+          <div class="col-md-8">
+            <label class="form-label fw-bold text-dark mb-3 d-flex align-items-center">
+              <i class="bi bi-table me-2 text-primary"></i>Table Name
+            </label>
+            <input class="form-control form-control-lg rounded-pill border-0 shadow-sm"
+                   formControlName="tableName"
+                   placeholder="Enter your table name..."
+                   style="background: rgba(102, 126, 234, 0.1); padding: 15px 25px;" />
           </div>
         </div>
+      </div>
 
-        <!-- Aligned Remove button -->
-        <button
-          type="button"
-          class="btn btn-outline-danger btn-sm"
-          (click)="removeColumn(i)"
-        >
-          Remove
+      <!-- Modern Columns Section -->
+      <div class="mb-4">
+        <h6 class="fw-bold text-dark mb-4 d-flex align-items-center">
+          <i class="bi bi-columns-gap me-2 text-success"></i>Table Columns
+        </h6>
+
+        <div formArrayName="columns">
+          <div *ngFor="let col of columns.controls; let i = index"
+               [formGroupName]="i"
+               class="card border-0 shadow-sm mb-4 rounded-3"
+               style="background: rgba(102, 126, 234, 0.05);">
+
+            <div class="card-body p-4">
+              <div class="row g-3 align-items-end">
+
+                <!-- Column Name -->
+                <div class="col-md-4">
+                  <label class="form-label fw-semibold text-dark">
+                    <i class="bi bi-tag me-1"></i>Column Name
+                  </label>
+                  <input class="form-control rounded-pill border-0 shadow-sm"
+                         formControlName="name"
+                         placeholder="e.g., user_id, name, email"
+                         style="background: white; padding: 12px 20px;" />
+                </div>
+
+                <!-- Data Type -->
+                <div class="col-md-3">
+                  <label class="form-label fw-semibold text-dark">
+                    <i class="bi bi-code-square me-1"></i>Data Type
+                  </label>
+                  <select class="form-select rounded-pill border-0 shadow-sm"
+                          formControlName="type"
+                          style="background: white; padding: 12px 20px;">
+                    <option value="">Select Type</option>
+                    <option *ngFor="let type of dataTypes" [value]="type">{{ type }}</option>
+                  </select>
+                </div>
+
+                <!-- Column Options -->
+                <div class="col-md-4">
+                  <div class="d-flex flex-column">
+                    <div class="d-flex align-items-center justify-content-between">
+                      <!-- Modern Switches -->
+                      <div class="d-flex flex-column gap-2">
+                        <div class="form-check form-switch">
+                          <input class="form-check-input"
+                                 type="checkbox"
+                                 [id]="'notNull-' + i"
+                                 formControlName="isNotNull"
+                                 style="background-color: #667eea; border-color: #667eea;">
+                          <label class="form-check-label fw-semibold text-dark" [for]="'notNull-' + i">
+                            <i class="bi bi-shield-check me-1"></i>NOT NULL
+                          </label>
+                        </div>
+
+                        <div class="form-check form-switch">
+                          <input class="form-check-input"
+                                 type="checkbox"
+                                 [id]="'pk-' + i"
+                                 formControlName="isPrimaryKey"
+                                 style="background-color: #667eea; border-color: #667eea;">
+                          <label class="form-check-label fw-semibold text-dark" [for]="'pk-' + i">
+                            <i class="bi bi-key me-1"></i>PRIMARY KEY
+                          </label>
+                        </div>
+                      </div>
+
+                      <!-- Modern Remove Button -->
+                      <button type="button"
+                              class="btn btn-outline-danger rounded-circle p-2 ms-3"
+                              (click)="removeColumn(i)"
+                              style="width: 40px; height: 40px;">
+                        <i class="bi bi-trash"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Modern Action Buttons -->
+      <div class="d-flex gap-3 mt-5 flex-wrap">
+        <button type="button"
+                class="btn btn-outline-primary rounded-pill px-4 py-2 fw-semibold"
+                (click)="addColumn()"
+                style="border: 2px solid #667eea;">
+          <i class="bi bi-plus-circle me-2"></i>Add Column
+        </button>
+
+        <button type="submit"
+                class="btn rounded-pill px-5 py-2 fw-semibold shadow-sm"
+                [disabled]="isSubmitting"
+                style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none;">
+          <span *ngIf="!isSubmitting">
+            <i class="bi me-2" [ngClass]="{
+              'bi-plus-square': !isUpdate,
+              'bi-pencil-square': isUpdate
+            }"></i>
+            {{ isUpdate ? 'Update Table' : 'Create Table' }}
+          </span>
+          <span *ngIf="isSubmitting" class="d-flex align-items-center">
+            <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+            {{ isUpdate ? 'Updating...' : 'Creating...' }}
+          </span>
         </button>
       </div>
-    </div>
+    </form>
   </div>
-</div>
-
-    <!-- Action Buttons -->
-    <div class="d-flex gap-2 mt-4">
-      <button type="button" class="btn btn-outline-secondary" (click)="addColumn()">+ Add Column</button>
-      <button type="submit" class="btn btn-primary" [disabled]="isSubmitting">
-        {{ isSubmitting ? (isUpdate ? 'Updating...' : 'Creating...') : (isUpdate ? 'Update Table' : 'Create Table') }}
-      </button>
-
-    </div>
-  </form>
 </div>

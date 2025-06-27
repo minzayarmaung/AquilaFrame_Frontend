@@ -1,47 +1,126 @@
-<div class="d-flex flex-column flex-shrink-0 p-3 sidebar" [class.closed]="isSidebarClosed">
-  <button class="toggle-btn" (click)="toggleSidebar()">
-    <i class="bi bi-list icon"></i>
-    <span *ngIf="!isSidebarClosed">Toggle Sidebar</span>
-  </button>
+<!-- Modern Sidebar -->
+<div class="d-flex flex-column sidebar shadow-lg"
+     [class.closed]="isSidebarClosed"
+     style="background: linear-gradient(180deg, #2c3e50 0%, #34495e 100%); backdrop-filter: blur(10px);">
 
-  <br>
+  <!-- Toggle Button -->
+  <div class="p-3 border-bottom" style="border-color: rgba(255,255,255,0.1) !important;">
+    <button class="btn btn-outline-light rounded-pill w-100 d-flex align-items-center justify-content-center"
+            (click)="toggleSidebar()"
+            style="border: 1px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.05);">
+      <i class="bi bi-list fs-5 me-2" *ngIf="!isSidebarClosed"></i>
+      <i class="bi bi-list fs-5" *ngIf="isSidebarClosed"></i>
+      <span *ngIf="!isSidebarClosed" class="fw-medium">Menu</span>
+    </button>
+  </div>
 
-  <ul class="nav nav-pills flex-column mb-auto">
-    <li class="nav-item">
-      <a routerLink="/home" routerLinkActive="active" class="nav-link" aria-current="page">
-        <i class="bi bi-house-door icon"></i>
-        <span *ngIf="!isSidebarClosed">Dashboard</span>
-      </a>
-    </li>
-    <li>
-      <a routerLink="/orders" routerLinkActive="active" class="nav-link link-dark">
-        <i class="bi bi-box-seam icon"></i>
-        <span *ngIf="!isSidebarClosed">Orders</span>
-      </a>
-    </li>
-    <li>
-      <a routerLink="/products" routerLinkActive="active" class="nav-link link-dark">
-        <i class="bi bi-cart icon"></i>
-        <span *ngIf="!isSidebarClosed">Products</span>
-      </a>
-    </li>
-    <li>
-      <a routerLink="/user-roles" routerLinkActive="active" class="nav-link link-dark">
-        <i class="bi bi-people icon"></i>
-        <span *ngIf="!isSidebarClosed">User</span>
-      </a>
-    </li>
-    <li>
-      <a routerLink="/reports" routerLinkActive="active" class="nav-link link-dark">
-        <i class="bi bi-file-earmark-text icon"></i>
-        <span *ngIf="!isSidebarClosed">Reports</span>
-      </a>
-    </li>
-    <li>
-      <a routerLink="/user-tables" routerLinkActive="active" class="nav-link link-dark">
-        <i class="bi bi-table"></i>
-        <span *ngIf="!isSidebarClosed">Tables</span>
-      </a>
-    </li>
-  </ul>
+  <!-- Navigation Menu -->
+  <div class="flex-grow-1 p-3">
+    <ul class="nav flex-column">
+      <!-- Dashboard -->
+      <li class="nav-item mb-2">
+        <a routerLink="/home"
+           routerLinkActive="active"
+           class="nav-link text-white rounded-3 p-3 d-flex align-items-center position-relative overflow-hidden"
+           style="transition: all 0.3s ease; background: transparent;">
+          <div class="d-flex align-items-center w-100">
+            <div class="me-3 p-2 rounded-circle" style="background: rgba(255,255,255,0.1);">
+              <i class="bi bi-house-door fs-5"></i>
+            </div>
+            <span *ngIf="!isSidebarClosed" class="fw-medium">Dashboard</span>
+          </div>
+        </a>
+      </li>
+
+      <!-- Orders -->
+      <li class="nav-item mb-2">
+        <a routerLink="/orders"
+           routerLinkActive="active"
+           class="nav-link text-white rounded-3 p-3 d-flex align-items-center position-relative overflow-hidden"
+           style="transition: all 0.3s ease; background: transparent;">
+          <div class="d-flex align-items-center w-100">
+            <div class="me-3 p-2 rounded-circle" style="background: rgba(255,255,255,0.1);">
+              <i class="bi bi-box-seam fs-5"></i>
+            </div>
+            <span *ngIf="!isSidebarClosed" class="fw-medium">Orders</span>
+            <span *ngIf="!isSidebarClosed" class="badge bg-warning text-dark ms-auto rounded-pill">12</span>
+          </div>
+        </a>
+      </li>
+
+      <!-- Products -->
+      <li class="nav-item mb-2">
+        <a routerLink="/products"
+           routerLinkActive="active"
+           class="nav-link text-white rounded-3 p-3 d-flex align-items-center position-relative overflow-hidden"
+           style="transition: all 0.3s ease; background: transparent;">
+          <div class="d-flex align-items-center w-100">
+            <div class="me-3 p-2 rounded-circle" style="background: rgba(255,255,255,0.1);">
+              <i class="bi bi-cart fs-5"></i>
+            </div>
+            <span *ngIf="!isSidebarClosed" class="fw-medium">Products</span>
+          </div>
+        </a>
+      </li>
+
+      <!-- Users -->
+      <li class="nav-item mb-2">
+        <a routerLink="/user-roles"
+           routerLinkActive="active"
+           class="nav-link text-white rounded-3 p-3 d-flex align-items-center position-relative overflow-hidden"
+           style="transition: all 0.3s ease; background: transparent;">
+          <div class="d-flex align-items-center w-100">
+            <div class="me-3 p-2 rounded-circle" style="background: rgba(255,255,255,0.1);">
+              <i class="bi bi-people fs-5"></i>
+            </div>
+            <span *ngIf="!isSidebarClosed" class="fw-medium">Users</span>
+          </div>
+        </a>
+      </li>
+
+      <!-- Reports -->
+      <li class="nav-item mb-2">
+        <a routerLink="/reports"
+           routerLinkActive="active"
+           class="nav-link text-white rounded-3 p-3 d-flex align-items-center position-relative overflow-hidden"
+           style="transition: all 0.3s ease; background: transparent;">
+          <div class="d-flex align-items-center w-100">
+            <div class="me-3 p-2 rounded-circle" style="background: rgba(255,255,255,0.1);">
+              <i class="bi bi-file-earmark-text fs-5"></i>
+            </div>
+            <span *ngIf="!isSidebarClosed" class="fw-medium">Reports</span>
+          </div>
+        </a>
+      </li>
+
+      <!-- Tables -->
+      <li class="nav-item mb-2">
+        <a routerLink="/user-tables"
+           routerLinkActive="active"
+           class="nav-link text-white rounded-3 p-3 d-flex align-items-center position-relative overflow-hidden"
+           style="transition: all 0.3s ease; background: transparent;">
+          <div class="d-flex align-items-center w-100">
+            <div class="me-3 p-2 rounded-circle" style="background: rgba(255,255,255,0.1);">
+              <i class="bi bi-table fs-5"></i>
+            </div>
+            <span *ngIf="!isSidebarClosed" class="fw-medium">Tables</span>
+          </div>
+        </a>
+      </li>
+    </ul>
+  </div>
+
+  <!-- User Profile Section (Bottom) -->
+  <div class="p-3 border-top" style="border-color: rgba(255,255,255,0.1) !important;" *ngIf="!isSidebarClosed">
+    <div class="d-flex align-items-center text-white p-2 rounded-3"
+         style="background: rgba(255,255,255,0.05);">
+      <img src="assets/default-user.png" width="40" height="40"
+           class="rounded-circle me-3 border border-2 border-white-50" alt="User">
+      <div class="flex-grow-1">
+        <div class="fw-semibold" style="font-size: 0.9rem;">{{ "UserName" }}</div>
+        <small class="text-white-50">Online</small>
+      </div>
+      <div class="bg-success rounded-circle" style="width: 8px; height: 8px;"></div>
+    </div>
+  </div>
 </div>

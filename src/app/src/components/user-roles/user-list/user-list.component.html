@@ -1,36 +1,193 @@
-<div class="d-flex justify-content-between align-items-center mb-3">
-  <h4>System Users</h4>
-  <button class="btn btn-primary" >+ Create User</button>
-</div>
+<!-- Modern System Users Interface -->
+<div class="container-fluid p-4" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh;">
+  <div class="row justify-content-center">
+    <div class="col-12">
+      <!-- Header Section -->
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+          <h2 class="text-white fw-bold mb-1">System Users</h2>
+          <p class="text-white-50 mb-0">Manage and monitor user accounts</p>
+        </div>
+        <button class="btn btn-light btn-lg px-4 py-2 rounded-pill shadow-sm">
+          <i class="bi bi-plus-circle me-2"></i>Create User
+        </button>
+      </div>
 
-<table class="table table-bordered table-hover table-striped">
-  <thead class="table-dark">
-    <tr>
-      <th>No</th>
-      <th>Username</th>
-      <th>Email</th>
-      <th>Phone</th>
-      <th>Roles</th>
-      <th>Status</th>
-      <th>Usage Age</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let user of users; let i = index">
-      <td>{{ i + 1 }}</td>
-      <td>{{ user.username }}</td>
-      <td>{{ user.email }}</td>
-      <td>{{ user.phone }}</td>
-      <td>
-        {{ user.role }}
-        <!-- <span class="badge bg-secondary me-1" *ngFor="let role of user.role">{{ role }}</span> -->
-      </td>
-      <td>
-        <span class="badge" [ngClass]="user.userStatus ? 'bg-success' : 'bg-danger'">
-          {{ user.userStatus ? 'Active' : 'Disabled' }}
-        </span>
-      </td>
-      <td>{{ user.usageAge }}</td>
-    </tr>
-  </tbody>
-</table>
+      <!-- Search and Filters Card -->
+      <div class="card border-0 shadow-lg mb-4" style="backdrop-filter: blur(10px); background: rgba(255, 255, 255, 0.95);">
+        <div class="card-body p-4">
+          <div class="row align-items-center">
+            <div class="col-md-6">
+              <div class="position-relative">
+                <input
+                  type="text"
+                  class="form-control form-control-lg border-0 rounded-pill ps-5"
+                  placeholder="Search users by name, email, or role..."
+                  [(ngModel)]="searchTerm"
+                  (input)="searchUsers()"
+                  style="background: #f8f9fa; box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);"
+                />
+                <i class="bi bi-search position-absolute top-50 start-0 translate-middle-y ms-3 text-muted"></i>
+              </div>
+            </div>
+            <div class="col-md-6 text-end">
+              <div class="btn-group" role="group">
+                <button class="btn btn-outline-primary rounded-pill me-2">
+                  <i class="bi bi-funnel me-1"></i>Filter
+                </button>
+                <button class="btn btn-outline-secondary rounded-pill">
+                  <i class="bi bi-download me-1"></i>Export
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Users Table Card -->
+      <div class="card border-0 shadow-lg" style="backdrop-filter: blur(10px); background: rgba(255, 255, 255, 0.98);">
+        <div class="card-body p-0">
+          <div class="table-responsive">
+            <table class="table table-hover mb-0">
+              <thead style="background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);">
+                <tr>
+                  <th class="text-white fw-semibold py-3 px-4 border-0" style="width: 60px;">#</th>
+                  <th class="text-white fw-semibold py-3 px-4 border-0">User</th>
+                  <th class="text-white fw-semibold py-3 px-4 border-0">Contact</th>
+                  <th class="text-white fw-semibold py-3 px-4 border-0">Role</th>
+                  <th class="text-white fw-semibold py-3 px-4 border-0">Status</th>
+                  <th class="text-white fw-semibold py-3 px-4 border-0">Usage</th>
+                  <th class="text-white fw-semibold py-3 px-4 border-0">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let user of users; let i = index"
+                    class="border-0"
+                    style="border-bottom: 1px solid #f1f3f4 !important;">
+
+                  <!-- Index -->
+                  <td class="py-4 px-4">
+                    <span class="badge bg-light text-dark rounded-circle p-2" style="width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;">
+                      {{ i + 1 }}
+                    </span>
+                  </td>
+
+                  <!-- User Info -->
+                  <td class="py-4 px-4">
+                    <div class="d-flex align-items-center">
+                      <div class="position-relative me-3">
+                        <img
+                          [src]="user.profileImageUrl || 'assets/default-user.png'"
+                          class="rounded-circle shadow-sm"
+                          width="48"
+                          height="48"
+                          alt="User Avatar"
+                          style="object-fit: cover; border: 3px solid #e9ecef;"
+                        />
+                        <span class="position-absolute bottom-0 end-0 bg-success rounded-circle"
+                              style="width: 14px; height: 14px; border: 2px solid white;"></span>
+                      </div>
+                      <div>
+                        <h6 class="mb-0 fw-semibold text-dark">{{ user.username }}</h6>
+                        <small class="text-muted">ID: #{{ user.id || (1000 + i) }}</small>
+                      </div>
+                    </div>
+                  </td>
+
+                  <!-- Contact Info -->
+                  <td class="py-4 px-4">
+                    <div>
+                      <div class="fw-medium text-dark mb-1">{{ user.email }}</div>
+                      <small class="text-muted">
+                        <i class="bi bi-telephone me-1"></i>{{ user.phone }}
+                      </small>
+                    </div>
+                  </td>
+
+                  <!-- Role -->
+                  <td class="py-4 px-4">
+                    <span class="badge rounded-pill px-3 py-2 fw-medium"
+                          [ngClass]="{
+                            'bg-primary': user.role === 'Admin',
+                            'bg-info': user.role === 'Manager',
+                            'bg-secondary': user.role === 'User',
+                            'bg-warning text-dark': user.role === 'Editor'
+                          }">
+                      <i class="bi bi-person-badge me-1"></i>{{ user.role }}
+                    </span>
+                  </td>
+
+                  <!-- Status -->
+                  <td class="py-4 px-4">
+                    <span class="badge rounded-pill px-3 py-2 fw-medium"
+                          [ngClass]="user.userStatus ? 'bg-success' : 'bg-danger'">
+                      <i class="bi" [ngClass]="user.userStatus ? 'bi-check-circle' : 'bi-x-circle'"></i>
+                      {{ user.userStatus ? 'Active' : 'Disabled' }}
+                    </span>
+                  </td>
+
+                  <!-- Usage Age -->
+                  <td class="py-4 px-4">
+                    <div class="d-flex align-items-center">
+                      <i class="bi bi-clock me-2 text-muted"></i>
+                      <span class="fw-medium text-dark">{{ user.usageAge }}</span>
+                    </div>
+                  </td>
+
+                  <!-- Actions -->
+                  <td class="py-4 px-4">
+                    <div class="dropdown">
+                      <button class="btn btn-light btn-sm rounded-pill px-3"
+                              type="button"
+                              data-bs-toggle="dropdown">
+                        <i class="bi bi-three-dots"></i>
+                      </button>
+                      <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0">
+                        <li><a class="dropdown-item" href="#"><i class="bi bi-eye me-2"></i>View</a></li>
+                        <li><a class="dropdown-item" href="#"><i class="bi bi-pencil me-2"></i>Edit</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item text-danger" href="#"><i class="bi bi-trash me-2"></i>Delete</a></li>
+                      </ul>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Table Footer -->
+          <div class="p-4 border-top" style="background: #f8f9fa;">
+            <div class="d-flex justify-content-between align-items-center">
+              <div class="text-muted">
+                <small>Showing 1-10 of 245 users</small>
+              </div>
+              <nav>
+                <ul class="pagination pagination-sm mb-0">
+                  <li class="page-item">
+                    <a class="page-link rounded-pill me-1" href="#" style="border: none; background: #e9ecef;">
+                      <i class="bi bi-chevron-left"></i>
+                    </a>
+                  </li>
+                  <li class="page-item active">
+                    <a class="page-link rounded-pill mx-1" href="#" style="border: none; background: #667eea;">1</a>
+                  </li>
+                  <li class="page-item">
+                    <a class="page-link rounded-pill mx-1" href="#" style="border: none; background: #e9ecef; color: #6c757d;">2</a>
+                  </li>
+                  <li class="page-item">
+                    <a class="page-link rounded-pill mx-1" href="#" style="border: none; background: #e9ecef; color: #6c757d;">3</a>
+                  </li>
+                  <li class="page-item">
+                    <a class="page-link rounded-pill ms-1" href="#" style="border: none; background: #e9ecef;">
+                      <i class="bi bi-chevron-right"></i>
+                    </a>
+                  </li>
+                </ul>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,17 +1,18 @@
 import { Component, inject, NgModule } from '@angular/core';
-import { NgModel, ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, NgModel, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { User, userService } from '../../../services/UserService';
+import { User , userService} from '../../../services/userService';
 
 @Component({
   selector: 'app-user-list',
   standalone: true,
-  imports: [ReactiveFormsModule , CommonModule],
+  imports: [ReactiveFormsModule , CommonModule , FormsModule],
   templateUrl: './user-list.component.html',
   styleUrl: './user-list.component.css'
 })
 export class UserListComponent {
   users: User[] = [];
+  searchTerm: string = '';
 
   constructor(private userService: userService) {}
 
@@ -44,6 +45,35 @@ export class UserListComponent {
       return 'Sales Person'
     }
   }
+
+searchUsers() {
+  const term = this.searchTerm.trim();
+
+  if (term) {
+    this.userService.searchUsers(term).subscribe(data => {
+      this.users = data.map(user => {
+        const role = this.getRole(user.n1);
+        const userStatus = this.getStatus(user.status);
+        const createdDate = this.parseDate(user.createddate);
+        const today = new Date();
+        const usageAge = this.getUsageAge(createdDate, today);
+        return { ...user, usageAge, role, userStatus };
+      });
+    });
+  } else {
+    this.userService.getAllUsers().subscribe(data => {
+      this.users = data.map(user => {
+        const role = this.getRole(user.n1);
+        const userStatus = this.getStatus(user.status);
+        const createdDate = this.parseDate(user.createddate);
+        const today = new Date();
+        const usageAge = this.getUsageAge(createdDate, today);
+        return { ...user, usageAge, role, userStatus };
+      });
+    });
+  }
+}
+
 
     // Convert 'yyyyMMdd' to Date
   parseDate(yyyymmdd: string): Date {

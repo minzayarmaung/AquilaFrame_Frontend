@@ -1,81 +1,176 @@
-<div class="container d-flex justify-content-center align-items-center min-vh-100">
-  <div class="card shadow p-4" style="max-width: 400px; width: 100%;">
-    <h2 class="text-center mb-4">AquilaFrame User Login</h2>
+<div class="d-flex justify-content-center align-items-center min-vh-100 position-fixed top-0 start-0 w-100 h-100"
+     style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            overflow-y: auto;">
 
+  <!-- Background Pattern -->
+  <div class="position-absolute w-100 h-100 top-0 start-0"
+       style="background-image: radial-gradient(circle at 25% 25%, rgba(255,255,255,0.1) 0%, transparent 50%),
+              radial-gradient(circle at 75% 75%, rgba(255,255,255,0.05) 0%, transparent 50%);
+              pointer-events: none;"></div>
 
-    <form [formGroup]="form" (ngSubmit)="submit()">
-      <div class="mb-3">
-        <label for="email" class="form-label">Email address</label>
-        <input
-          id="email"
-          formControlName="email"
-          type="email"
-          class="form-control"
-          [class.is-invalid]="form.get('email')?.touched && form.get('email')?.invalid"
-        />
-        <div class="invalid-feedback" *ngIf="form.get('email')?.hasError('required')">
-          Email is required
-        </div>
-        <div class="invalid-feedback" *ngIf="form.get('email')?.hasError('email')">
-          Invalid email format
-        </div>
-      </div>
+  <div class="card border-0 shadow-lg"
+       style="max-width: 450px; width: 100%;
+              background: rgba(255,255,255,0.15);
+              backdrop-filter: blur(20px);
+              border-radius: 20px;
+              position: relative;
+              z-index: 1;">
 
-
-      <div class="mb-3 position-relative">
-        <label for="password" class="form-label">Password</label>
-        <div class="input-group">
-          <input
-            [type]="showPassword ? 'text' : 'password'"
-            id="password"
-            formControlName="password"
-            class="form-control"
-            [class.is-invalid]="form.get('password')?.touched && form.get('password')?.invalid"
-          />
-          <button
-            type="button"
-            class="btn btn-outline-secondary"
-            (click)="showPassword = !showPassword"
-            tabindex="-1"
-          >
-            <i [class]="showPassword ? 'bi bi-eye-slash' : 'bi bi-eye'"></i>
-          </button>
-        </div>
-        <div class="invalid-feedback" *ngIf="form.get('password')?.hasError('required')">
-          Password is required
+    <!-- Header Section -->
+    <div class="card-header border-0 text-center py-4"
+         style="background: rgba(255,255,255,0.1);
+                border-radius: 20px 20px 0 0;">
+      <div class="mb-3 d-flex justify-content-center">
+        <div class="p-3 rounded-circle"
+             style="background: rgba(255,255,255,0.2);">
+          <i class="bi bi-lightning-charge text-white" style="font-size: 2rem;"></i>
         </div>
       </div>
+      <h2 class="text-white fw-bold mb-2">Welcome Back</h2>
+      <p class="text-white-50 mb-0">Sign in to your AquilaFrame account</p>
+    </div>
 
-      <!-- Loading Spinner -->
-      <div *ngIf="loading" @fade class="loading-container text-center">
-        <img src="https://img.pikbest.com/png-images/20190918/cartoon-snail-loading-loading-gif-animation_2734139.png!bw700" alt="Loading..." class="loading-gif" />
-        <!-- <img src="https://lh5.googleusercontent.com/proxy/OUqG0HgVNVMNorlPCmI4VgJa-3h7uHLkkMy9vdJ0eRsQlvJBytFUS-HvuW-O9EJd-c9xB7KAqlwby4Fzp59g1705FzBuP-F8dC1ZaBQtmLeCu5i6FfSd6Mmzh8mjOwgrEYZwy5UStg" alt="Loading..." class="loading-gif" /> -->
-        <!-- <img src="assets/loading.gif" alt="Loading..." class="loading-gif" /> -->
-        <p>Please wait...</p>
+    <div class="card-body p-4">
+      <form [formGroup]="form" (ngSubmit)="submit()">
+
+        <!-- Email Field -->
+        <div class="mb-4">
+          <label for="email" class="form-label text-white fw-semibold mb-2">
+            <i class="bi bi-envelope me-2"></i>Email Address
+          </label>
+          <div class="position-relative">
+            <input
+              id="email"
+              formControlName="email"
+              type="email"
+              class="form-control border-0 rounded-pill py-3 ps-4"
+              placeholder="Enter your email"
+              style="background: rgba(255,255,255,0.2);
+                     color: white;
+                     backdrop-filter: blur(10px);
+                     transition: all 0.3s ease;"
+              [class.is-invalid]="form.get('email')?.touched && form.get('email')?.invalid"
+            />
+            <div class="invalid-feedback ps-3" *ngIf="form.get('email')?.hasError('required')">
+              <i class="bi bi-exclamation-circle me-1"></i>Email is required
+            </div>
+            <div class="invalid-feedback ps-3" *ngIf="form.get('email')?.hasError('email')">
+              <i class="bi bi-exclamation-circle me-1"></i>Invalid email format
+            </div>
+          </div>
+        </div>
+
+        <!-- Password Field -->
+        <div class="mb-4">
+          <label for="password" class="form-label text-white fw-semibold mb-2">
+            <i class="bi bi-lock me-2"></i>Password
+          </label>
+          <div class="input-group">
+            <input
+              [type]="showPassword ? 'text' : 'password'"
+              id="password"
+              formControlName="password"
+              class="form-control border-0 rounded-start-pill py-3 ps-4"
+              placeholder="Enter your password"
+              style="background: rgba(255,255,255,0.2);
+                     color: white;
+                     backdrop-filter: blur(10px);
+                     transition: all 0.3s ease;"
+              [class.is-invalid]="form.get('password')?.touched && form.get('password')?.invalid"
+            />
+            <button
+              type="button"
+              class="btn border-0 rounded-end-pill px-3"
+              style="background: rgba(255,255,255,0.2);
+                     color: white;
+                     backdrop-filter: blur(10px);"
+              (click)="showPassword = !showPassword"
+              tabindex="-1"
+            >
+              <i [class]="showPassword ? 'bi bi-eye-slash' : 'bi bi-eye'"></i>
+            </button>
+          </div>
+          <div class="invalid-feedback ps-3" *ngIf="form.get('password')?.hasError('required')">
+            <i class="bi bi-exclamation-circle me-1"></i>Password is required
+          </div>
+        </div>
+
+        <!-- Loading Spinner -->
+        <div *ngIf="loading" @fade class="text-center my-4">
+          <div class="d-flex flex-column align-items-center">
+            <div class="spinner-border text-light mb-3"
+                 style="width: 3rem; height: 3rem;" role="status">
+              <span class="visually-hidden">Loading...</span>
+            </div>
+            <p class="text-white-50 mb-0">Signing you in...</p>
+          </div>
+        </div>
+
+        <!-- Forgot Password -->
+        <div class="text-end mb-4">
+          <a routerLink="/forgot-password"
+             class="text-white text-decoration-none fw-medium"
+             style="font-size: 0.9rem; opacity: 0.8;">
+            <i class="bi bi-question-circle me-1"></i>Forgot Password?
+          </a>
+        </div>
+
+        <!-- Login Button -->
+        <button type="submit"
+                class="btn w-100 py-3 rounded-pill fw-bold mb-3 border-0"
+                style="background: linear-gradient(45deg, #fff 0%, rgba(255,255,255,0.9) 100%);
+                       color: #667eea;
+                       transition: all 0.3s ease;
+                       box-shadow: 0 4px 15px rgba(255,255,255,0.2);"
+                [disabled]="form.invalid || loading">
+          <i class="bi bi-box-arrow-in-right me-2"></i>
+          {{ loading ? 'Signing In...' : 'Sign In' }}
+        </button>
+      </form>
+
+      <!-- Divider -->
+      <div class="position-relative text-center my-4">
+        <hr style="border-color: rgba(255,255,255,0.3);">
+        <span class="position-absolute top-50 start-50 translate-middle px-3 text-white-50 fw-medium"
+              style="background: rgba(255,255,255,0.1); border-radius: 20px; font-size: 0.85rem;">
+          or continue with
+        </span>
       </div>
 
+      <!-- Social Buttons -->
+      <div class="d-grid gap-3">
+        <!-- Google Button -->
+        <a routerLink="/signup"
+           class="btn d-flex align-items-center justify-content-center py-3 rounded-pill border-0 text-white fw-medium"
+           style="background: rgba(255,255,255,0.2);
+                  backdrop-filter: blur(10px);
+                  transition: all 0.3s ease;">
+          <i class="fab fa-google me-3" style="font-size: 1.1rem;"></i>
+          Continue with Google
+        </a>
 
-      <div class="text-end mb-3">
-        <a routerLink="/forgot-password" class="text-decoration-none small">Forgot Password?</a>
+        <!-- Signup Button -->
+        <a routerLink="/signup"
+           class="btn d-flex align-items-center justify-content-center py-3 rounded-pill border-2 border-white text-white fw-medium"
+           style="background: transparent;
+                  transition: all 0.3s ease;">
+          <i class="bi bi-person-plus me-2"></i>
+          Create New Account
+        </a>
       </div>
 
-
-      <button type="submit" class="btn btn-primary w-100 mb-2" [disabled]="form.invalid">
-        Login
-      </button>
-    </form>
-
-    <a routerLink="/signup" class="btn btn-outline-secondary w-100">
-      Signup
-    </a>
-
-    <a routerLink="/signup" class="btn btn-outline-danger w-100 d-flex align-items-center justify-content-center gap-2 mt-2">
-      <i class="fab fa-google"></i>
-      Continue with Google
-    </a>
-
-    <div *ngIf="error()" class="alert alert-danger mt-3 text-center">
-      {{ error() }}
+      <!-- Error Message -->
+      <div *ngIf="error()"
+           class="alert border-0 mt-4 rounded-3 text-center"
+           style="background: rgba(220, 53, 69, 0.2);
+                  color: #fff;
+                  backdrop-filter: blur(10px);">
+        <i class="bi bi-exclamation-triangle me-2"></i>
+        {{ error() }}
+      </div>
     </div>
   </div>
 </div>

@@ -39,4 +39,52 @@
   background-color: #0d6efd; /* Bootstrap primary */
   color: white;
 }
+.sidebar {
+  width: 280px;
+  min-height: 100vh;
+  transition: all 0.3s ease;
+}
 
+.sidebar.closed {
+  width: 80px;
+}
+
+.sidebar .nav-link:hover {
+  background: rgba(255,255,255,0.1) !important;
+  transform: translateX(5px);
+}
+
+.sidebar .nav-link.active {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+.sidebar .nav-link.active::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 4px;
+  background: #fff;
+  border-radius: 0 4px 4px 0;
+}
+
+/* Smooth Animations */
+.sidebar .nav-link, .navbar .nav-link {
+  transition: all 0.3s ease;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+  .sidebar {
+    width: 100%;
+    position: fixed;
+    z-index: 1000;
+    transform: translateX(-100%);
+  }
+
+  .sidebar.open {
+    transform: translateX(0);
+  }
+}

@@ -1,0 +1,10 @@
+.navbar .nav-link:hover {
+  background: rgba(255,255,255,0.2) !important;
+  transform: translateY(-1px);
+  transition: all 0.3s ease;
+}
+
+.dropdown-menu .dropdown-item:hover {
+  background: rgba(102, 126, 234, 0.1) !important;
+  color: #667eea !important;
+}

@@ -1,0 +1,9 @@
+.table td,
+.table th {
+  vertical-align: middle;
+}
+
+img.rounded-circle {
+  object-fit: cover;
+  border: 1px solid #dee2e6;
+}
