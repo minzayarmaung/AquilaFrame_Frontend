@@ -1,0 +1,131 @@
+/* Complete Z-Index Hierarchy Fix */
+
+/* 1. Navbar base level */
+app-navbar,
+.navbar {
+  position: relative;
+  z-index: 1030; /* Lower than modals */
+}
+
+/* 2. Navbar dropdown - should be higher than navbar but lower than modals */
+app-navbar .dropdown-menu,
+.navbar .dropdown-menu {
+  z-index: 1035 !important; /* Higher than navbar, lower than modals */
+  position: absolute !important;
+}
+
+/* 3. Modal backdrop */
+.modal-backdrop {
+  z-index: 1040 !important;
+}
+
+/* 4. Modals - highest priority */
+.modal {
+  z-index: 1050 !important;
+}
+
+/* 5. Modal content */
+.modal-dialog {
+  z-index: 1051 !important;
+}
+
+/* 6. Specific fix for table management modals */
+.modal.fade.show {
+  z-index: 1050 !important;
+}
+
+/* 7. Create table modal specific */
+.modal-content {
+  z-index: 1052 !important;
+}
+
+/* 8. Toast alerts in modals */
+.modal .alert {
+  z-index: 1055 !important;
+}
+
+/* 9. Spinner overlay in modals */
+.modal .spinner-overlay {
+  z-index: 1053 !important;
+}
+
+/* 10. Alternative: Target modals by content */
+.table-management-modal {
+  z-index: 1050 !important;
+}
+
+.table-management-modal .modal-dialog {
+  z-index: 1051 !important;
+}
+
+.table-management-modal .modal-content {
+  z-index: 1052 !important;
+}
+
+/* 11. Ensure dropdown appears when no modal is open */
+body:not(.modal-open) app-navbar .dropdown-menu,
+body:not(.modal-open) .navbar .dropdown-menu {
+  z-index: 1035 !important;
+}
+
+/* 12. When modal is open, ensure it's on top */
+body.modal-open .modal {
+  z-index: 1050 !important;
+}
+
+body.modal-open .modal-backdrop {
+  z-index: 1040 !important;
+}
+
+body.modal-open app-navbar,
+body.modal-open .navbar {
+  z-index: 1030 !important;
+}
+
+/* 13. Sidebar should be lowest */
+app-sidebar {
+  z-index: 1020;
+}
+
+/* 14. Main content area */
+.flex-grow-1 {
+  z-index: auto;
+}
+
+/* 15. Enhanced navbar dropdown styling */
+.navbar .dropdown-menu.dropdown-menu-end {
+  z-index: 1035 !important;
+  min-width: 200px;
+  background: rgba(255,255,255,0.95) !important;
+  backdrop-filter: blur(10px) !important;
+  border: none !important;
+  border-radius: 12px !important;
+  margin-top: 8px !important;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.15) !important;
+}
+
+/* 16. Fix for component-specific issues */
+app-table-list .modal {
+  z-index: 1050 !important;
+}
+
+app-create-table .card {
+  z-index: auto;
+}
+
+/* 17. Mobile responsiveness */
+@media (max-width: 991.98px) {
+  .navbar-collapse {
+    background: rgba(102, 126, 234, 0.95);
+    backdrop-filter: blur(10px);
+    border-radius: 12px;
+    margin-top: 10px;
+    z-index: 1035;
+  }
+
+  .navbar .dropdown-menu {
+    position: static !important;
+    background: rgba(255,255,255,0.1) !important;
+    backdrop-filter: none !important;
+  }
+}
