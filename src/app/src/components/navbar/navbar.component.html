@@ -1,4 +1,4 @@
-<!-- navbar.component.html -->
+<!-- navbar.component.html - Updated with dropdown fix -->
 <nav class="navbar navbar-expand-lg shadow-sm"
      style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); backdrop-filter: blur(10px);">
   <div class="container-fluid px-4">
@@ -43,107 +43,6 @@
               {{ unreadCount > 99 ? '99+' : unreadCount }}
             </span>
           </a>
-
-          <!-- Notification Dropdown -->
-          <div class="dropdown-menu shadow-lg border-0 rounded-3 mt-2 p-0"
-               [class.show]="isNotificationDropdownOpen"
-               style="min-width: 400px; max-height: 500px; overflow-y: auto; background: rgba(255,255,255,0.98); backdrop-filter: blur(10px); right: 0; left: auto;">
-            
-            <!-- Header -->
-            <div class="px-3 py-2 border-bottom bg-light rounded-top">
-              <div class="d-flex justify-content-between align-items-center">
-                <h6 class="mb-0 fw-semibold text-dark">Notifications</h6>
-                <div class="d-flex gap-2">
-                  <button *ngIf="unreadCount > 0" 
-                          class="btn btn-sm btn-outline-primary rounded-pill px-3"
-                          (click)="markAllAsRead($event)">
-                    <i class="bi bi-check-all me-1"></i>Mark all read
-                  </button>
-                  <button class="btn btn-sm btn-outline-secondary rounded-circle"
-                          (click)="loadNotifications()"
-                          [disabled]="isLoadingNotifications">
-                    <i class="bi bi-arrow-clockwise" [class.spin]="isLoadingNotifications"></i>
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            <!-- Loading State -->
-            <div *ngIf="isLoadingNotifications" class="text-center py-4">
-              <div class="spinner-border spinner-border-sm text-primary" role="status">
-                <span class="visually-hidden">Loading...</span>
-              </div>
-              <p class="mt-2 text-muted small">Loading notifications...</p>
-            </div>
-
-            <!-- Notifications List -->
-            <div *ngIf="!isLoadingNotifications && notifications.length > 0" class="notification-list">
-              <div *ngFor="let notification of notifications; trackBy: trackNotification" 
-                   class="notification-item px-3 py-3 border-bottom position-relative"
-                   [class.unread]="!notification.isRead"
-                   (click)="markAsRead(notification, $event)">
-                
-                <!-- Unread indicator -->
-                <div *ngIf="!notification.isRead" 
-                     class="position-absolute top-0 start-0 bg-primary rounded-circle"
-                     style="width: 8px; height: 8px; margin: 8px;"></div>
-
-                <div class="d-flex">
-                  <!-- Icon -->
-                  <div class="me-3 flex-shrink-0">
-                    <i [class]="getNotificationIcon(notification.type)" style="font-size: 1.2rem;"></i>
-                  </div>
-
-                  <!-- Content -->
-                  <div class="flex-grow-1 min-w-0">
-                    <h6 class="mb-1 fw-semibold text-dark text-truncate">{{ notification.title }}</h6>
-                    <p class="mb-1 text-muted small">{{ notification.message }}</p>
-                    <small class="text-muted">{{ formatTimestamp(notification.timestamp) }}</small>
-                  </div>
-
-                  <!-- Actions -->
-                  <div class="flex-shrink-0 ms-2">
-                    <div class="dropdown">
-                      <button class="btn btn-sm btn-outline-light text-muted border-0 rounded-circle"
-                              data-bs-toggle="dropdown" 
-                              (click)="$event.stopPropagation()">
-                        <i class="bi bi-three-dots"></i>
-                      </button>
-                      <ul class="dropdown-menu dropdown-menu-end shadow border-0 rounded-3">
-                        <li *ngIf="!notification.isRead">
-                          <a class="dropdown-item" href="#" (click)="markAsRead(notification, $event)">
-                            <i class="bi bi-check me-2"></i>Mark as read
-                          </a>
-                        </li>
-                        <li>
-                          <a class="dropdown-item text-danger" href="#" (click)="deleteNotification(notification.id, $event)">
-                            <i class="bi bi-trash me-2"></i>Delete
-                          </a>
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Empty State -->
-            <div *ngIf="!isLoadingNotifications && notifications.length === 0" 
-                 class="text-center py-5">
-              <i class="bi bi-bell-slash fs-1 text-muted mb-3"></i>
-              <h6 class="text-muted">No notifications yet</h6>
-              <p class="text-muted small">When you have notifications, they'll appear here.</p>
-            </div>
-
-            <!-- Footer -->
-            <div class="px-3 py-2 border-top bg-light rounded-bottom">
-              <div class="text-center">
-                <a href="/notifications" class="btn btn-sm btn-outline-primary rounded-pill">
-                  View all notifications
-                </a>
-              </div>
-            </div>
-          </div>
         </li>
 
         <!-- User Dropdown -->
@@ -182,3 +81,110 @@
     </div>
   </div>
 </nav>
+
+<!-- Notification Dropdown - Moved outside navbar for better positioning -->
+<div class="notification-dropdown-wrapper"
+     [class.d-none]="!isNotificationDropdownOpen">
+  <div class="dropdown-menu show shadow-lg border-0 rounded-3 p-0"
+       style="min-width: 400px; max-height: 500px; overflow-y: auto; background: rgba(255,255,255,0.98); backdrop-filter: blur(10px); position: static;">
+    
+    <!-- Header -->
+    <div class="px-3 py-2 border-bottom bg-light rounded-top">
+      <div class="d-flex justify-content-between align-items-center">
+        <h6 class="mb-0 fw-semibold text-dark">Notifications</h6>
+        <div class="d-flex gap-2">
+          <button *ngIf="unreadCount > 0" 
+                  class="btn btn-sm btn-outline-primary rounded-pill px-3"
+                  (click)="markAllAsRead($event)">
+            <i class="bi bi-check-all me-1"></i>Mark all read
+          </button>
+          <button class="btn btn-sm btn-outline-secondary rounded-circle"
+                  (click)="loadNotifications()"
+                  [disabled]="isLoadingNotifications">
+            <i class="bi bi-arrow-clockwise" [class.spin]="isLoadingNotifications"></i>
+          </button>
+          <button class="btn btn-sm btn-outline-secondary rounded-circle"
+                  (click)="closeNotificationDropdown()">
+            <i class="bi bi-x"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Loading State -->
+    <div *ngIf="isLoadingNotifications" class="text-center py-4">
+      <div class="spinner-border spinner-border-sm text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+      <p class="mt-2 text-muted small">Loading notifications...</p>
+    </div>
+
+    <!-- Notifications List -->
+    <div *ngIf="!isLoadingNotifications && notifications.length > 0" class="notification-list">
+      <div *ngFor="let notification of notifications; trackBy: trackNotification" 
+           class="notification-item px-3 py-3 border-bottom position-relative"
+           [class.unread]="!notification.isRead"
+           (click)="markAsRead(notification, $event)">
+        
+        <!-- Unread indicator -->
+        <div *ngIf="!notification.isRead" 
+             class="position-absolute top-0 start-0 bg-primary rounded-circle"
+             style="width: 8px; height: 8px; margin: 8px;"></div>
+
+        <div class="d-flex">
+          <!-- Icon -->
+          <div class="me-3 flex-shrink-0">
+            <i [class]="getNotificationIcon(notification.type)" style="font-size: 1.2rem;"></i>
+          </div>
+
+          <!-- Content -->
+          <div class="flex-grow-1 min-w-0">
+            <h6 class="mb-1 fw-semibold text-dark text-truncate">{{ notification.title }}</h6>
+            <p class="mb-1 text-muted small">{{ notification.message }}</p>
+            <small class="text-muted">{{ formatTimestamp(notification.timestamp) }}</small>
+          </div>
+
+          <!-- Actions -->
+          <div class="flex-shrink-0 ms-2">
+            <div class="dropdown">
+              <button class="btn btn-sm btn-outline-light text-muted border-0 rounded-circle"
+                      data-bs-toggle="dropdown" 
+                      (click)="$event.stopPropagation()">
+                <i class="bi bi-three-dots"></i>
+              </button>
+              <ul class="dropdown-menu dropdown-menu-end shadow border-0 rounded-3">
+                <li *ngIf="!notification.isRead">
+                  <a class="dropdown-item" href="#" (click)="markAsRead(notification, $event)">
+                    <i class="bi bi-check me-2"></i>Mark as read
+                  </a>
+                </li>
+                <li>
+                  <a class="dropdown-item text-danger" href="#" (click)="deleteNotification(notification.id, $event)">
+                    <i class="bi bi-trash me-2"></i>Delete
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Empty State -->
+    <div *ngIf="!isLoadingNotifications && notifications.length === 0" 
+         class="text-center py-5">
+      <i class="bi bi-bell-slash fs-1 text-muted mb-3"></i>
+      <h6 class="text-muted">No notifications yet</h6>
+      <p class="text-muted small">When you have notifications, they'll appear here.</p>
+    </div>
+
+    <!-- Footer -->
+    <div class="px-3 py-2 border-top bg-light rounded-bottom">
+      <div class="text-center">
+        <a href="/notifications" class="btn btn-sm btn-outline-primary rounded-pill">
+          View all notifications
+        </a>
+      </div>
+    </div>
+  </div>
+</div>

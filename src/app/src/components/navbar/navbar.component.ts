@@ -30,23 +30,36 @@ export class NavbarComponent implements OnInit, OnDestroy {
     private notificationService: NotificationService
   ) {}
 
+  // ngOnInit(): void {
+  //   // Subscribe to notifications and unread count
+  //   this.subscriptions.add(
+  //     this.notificationService.notifications$.subscribe(notifications => {
+  //       this.notifications = notifications;
+  //     })
+  //   );
+
+  //   this.subscriptions.add(
+  //     this.notificationService.unreadCount$.subscribe(count => {
+  //       this.unreadCount = count;
+  //     })
+  //   );
+
+  //   // Load initial notifications
+  //   this.loadNotifications();
+  // }
+
   ngOnInit(): void {
-    // Subscribe to notifications and unread count
-    this.subscriptions.add(
-      this.notificationService.notifications$.subscribe(notifications => {
-        this.notifications = notifications;
-      })
-    );
+  this.notificationService.connectWebSocket(); // connect WebSocket
 
-    this.subscriptions.add(
-      this.notificationService.unreadCount$.subscribe(count => {
-        this.unreadCount = count;
-      })
-    );
+    this.notificationService.notifications$.subscribe((notifications) => {
+      notifications.forEach(notification => {
+        this.notifications.unshift(notification);
+        this.unreadCount++;
+      });
+    });
+  this.loadNotifications(); // initial HTTP load
+}
 
-    // Load initial notifications
-    this.loadNotifications();
-  }
 
   ngOnDestroy(): void {
     this.subscriptions.unsubscribe();
@@ -80,6 +93,11 @@ export class NavbarComponent implements OnInit, OnDestroy {
       document.removeEventListener('click', this.closeDropdownOnOutsideClick.bind(this));
     }
   }
+
+  closeNotificationDropdown() {
+  this.isNotificationDropdownOpen = false;
+}
+
 
   // Load notifications from backend
   loadNotifications(): void {

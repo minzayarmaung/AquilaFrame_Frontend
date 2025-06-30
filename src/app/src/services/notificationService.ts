@@ -96,7 +96,7 @@ export class NotificationService {
 
   // Load from REST API
   getNotifications(): Observable<Notification[]> {
-    return this.http.get<Notification[]>(`${this.apiUrl}/notifications`);
+    return this.http.get<Notification[]>(`${this.apiUrl}`);
   }
 
   loadNotifications(): void {

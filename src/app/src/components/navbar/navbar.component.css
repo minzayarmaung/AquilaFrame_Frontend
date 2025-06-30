@@ -8,3 +8,9 @@
   background: rgba(102, 126, 234, 0.1) !important;
   color: #667eea !important;
 }
+::ng-deep app-navbar .dropdown-menu {
+  position: fixed !important;
+  top: 60px !important;
+  right: 20px !important;
+  z-index: 1200 !important;
+}
