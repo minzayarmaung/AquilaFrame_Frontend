@@ -1,50 +1,129 @@
-
-<body>
-    <div class="container">
-        <div class="header">
-            <h1>Tech Products Dashboard</h1>
-            <p>Real-time product management with instant notifications</p>
-        </div>
-
-        <div class="add-product-section">
-            <form class="add-form" id="addProductForm">
-                <div class="form-group">
-                    <label for="name">Product Name</label>
-                    <input type="text" id="name" name="name" required>
-                </div>
-                <div class="form-group">
-                    <label for="price">Price ($)</label>
-                    <input type="number" id="price" name="price" step="0.01" required>
-                </div>
-                <div class="form-group">
-                    <label for="category">Category</label>
-                    <select id="category" name="category" required>
-                        <option value="">Select Category</option>
-                        <option value="Smartphone">Smartphone</option>
-                        <option value="Laptop">Laptop</option>
-                        <option value="Tablet">Tablet</option>
-                        <option value="Headphones">Headphones</option>
-                        <option value="Smart Watch">Smart Watch</option>
-                        <option value="Gaming">Gaming</option>
-                        <option value="Camera">Camera</option>
-                        <option value="Accessories">Accessories</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="description">Description</label>
-                    <input type="text" id="description" name="description" required>
-                </div>
-                <button type="submit" class="add-btn">
-                    <span id="btnText">Add Product</span>
-                    <span id="btnLoader" class="loading" style="display: none;"></span>
-                </button>
-            </form>
-        </div>
-
-        <div class="products-grid" id="productsGrid">
-            <!-- Products will be dynamically added here -->
-        </div>
+<!-- product-list.component.html -->
+<!-- Notification Toast -->
+<div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 1055;">
+  <div *ngIf="showNotification" 
+       class="toast show notification-toast" 
+       [class.fade-out]="fadeOut"
+       role="alert">
+    <div class="toast-header bg-success text-white border-0">
+      <i class="bi bi-check-circle-fill me-2"></i>
+      <strong class="me-auto">Product Added</strong>
+      <small>Just now</small>
     </div>
+    <div class="toast-body bg-white">
+      {{ notificationMessage }}
+    </div>
+  </div>
+</div>
 
-    <div class="notifications" id="notifications"></div>
-    <div class="connection-status" id="connectionStatus">Connecting...</div>
+<!-- Header Section -->
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <div>
+    <h2 class="fw-bold text-dark mb-1">Product Management</h2>
+    <p class="text-muted mb-0">Manage your tech products inventory</p>
+  </div>
+  <button class="btn btn-add-product" (click)="addNewProduct()">
+    <i class="bi bi-plus-circle me-2"></i>
+    Add Product
+  </button>
+</div>
+
+<!-- Stats Cards -->
+<div class="row mb-4">
+  <div class="col-md-3">
+    <div class="stat-card stat-card-blue">
+      <div class="stat-icon">
+        <i class="bi bi-box-seam"></i>
+      </div>
+      <div class="stat-content">
+        <h3>{{ products.length }}</h3>
+        <p>Total Products</p>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="stat-card stat-card-green">
+      <div class="stat-icon">
+        <i class="bi bi-check-circle"></i>
+      </div>
+      <div class="stat-content">
+        <h3>{{ getInStockCount() }}</h3>
+        <p>In Stock</p>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="stat-card stat-card-orange">
+      <div class="stat-icon">
+        <i class="bi bi-exclamation-triangle"></i>
+      </div>
+      <div class="stat-content">
+        <h3>{{ getOutOfStockCount() }}</h3>
+        <p>Out of Stock</p>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="stat-card stat-card-purple">
+      <div class="stat-icon">
+        <i class="bi bi-currency-dollar"></i>
+      </div>
+      <div class="stat-content">
+        <h3>${{ getTotalValue() }}</h3>
+        <p>Total Value</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Products Grid -->
+<div class="row">
+  <div class="col-xl-3 col-lg-4 col-md-6 mb-4" *ngFor="let product of products; trackBy: trackByProduct">
+    <div class="product-card">
+      <div class="product-image-container">
+        <img [src]="product.image" [alt]="product.name" class="product-image">
+        <div class="product-status" [class]="product.inStock ? 'status-available' : 'status-unavailable'">
+          {{ product.inStock ? 'Available' : 'Out of Stock' }}
+        </div>
+      </div>
+      
+      <div class="product-content">
+        <div class="product-category">{{ product.category }}</div>
+        <h5 class="product-title">{{ product.name }}</h5>
+        <p class="product-description">{{ product.description }}</p>
+        
+        <div class="product-rating mb-2">
+          <span *ngFor="let star of getStarArray(product.rating)" class="star">
+            <i class="bi bi-star-fill" [class.text-warning]="star <= product.rating"></i>
+          </span>
+          <span class="rating-text">({{ product.rating.toFixed(1) }})</span>
+        </div>
+        
+        <div class="product-footer">
+          <div class="product-price">${{ product.price }}</div>
+          <div class="product-actions">
+            <button class="btn btn-action btn-edit" (click)="editProduct(product)">
+              <i class="bi bi-pencil"></i>
+            </button>
+            <button class="btn btn-action btn-delete" (click)="deleteProduct(product.id!)">
+              <i class="bi bi-trash"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Empty State -->
+<div *ngIf="products.length === 0" class="empty-state">
+  <div class="empty-icon">
+    <i class="bi bi-box"></i>
+  </div>
+  <h4>No Products Yet</h4>
+  <p>Start by adding your first tech product to the inventory</p>
+  <button class="btn btn-add-product" (click)="addNewProduct()">
+    <i class="bi bi-plus-circle me-2"></i>
+    Add Your First Product
+  </button>
+</div>
